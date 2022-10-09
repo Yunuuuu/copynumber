@@ -1,9 +1,9 @@
 ####################################################################
-## Author: Gro Nilsen, Knut Liestøl and Ole Christian Lingjærde.
+## Author: Gro Nilsen, Knut Liestï¿½l and Ole Christian Lingjï¿½rde.
 ## Maintainer: Gro Nilsen <gronilse@ifi.uio.no>
 ## License: Artistic 2.0
 ## Part of the copynumber package
-## Reference: Nilsen and Liestøl et al. (2012), BMC Genomics
+## Reference: Nilsen and Liestï¿½l et al. (2012), BMC Genomics
 ####################################################################
 
 
@@ -49,8 +49,8 @@ winsorize <- function(data, pos.unit="bp", arms=NULL, method="mad", tau=2.5, k=2
   stopifnot(method %in% c("mad","pcf"))
   
   #Check assembly input:
-  if(!assembly %in% c("hg19","hg18","hg17","hg16","mm7","mm8","mm9")){
-    stop("assembly must be one of hg19, hg18, hg17 or hg16",call.=FALSE)
+  if(!assembly %in% supported_assembly){
+    stop("Unsupported assembly", call. = FALSE)
   }
   
   #Check data input: can either be a matrix/data frame or a filename

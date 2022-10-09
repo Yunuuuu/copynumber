@@ -1,10 +1,10 @@
   
 ####################################################################
-## Author: Gro Nilsen, Knut Liestøl and Ole Christian Lingjærde.
+## Author: Gro Nilsen, Knut Liestï¿½l and Ole Christian Lingjï¿½rde.
 ## Maintainer: Gro Nilsen <gronilse@ifi.uio.no>
 ## License: Artistic 2.0
 ## Part of the copynumber package
-## Reference: Nilsen and Liestøl et al. (2012), BMC Genomics
+## Reference: Nilsen and Liestï¿½l et al. (2012), BMC Genomics
 ####################################################################
 
 
@@ -30,8 +30,8 @@ aspcf <- function(logR,BAF,pos.unit="bp",arms=NULL,kmin=5,gamma=40,baf.thres=c(0
   }
   
   #Check assembly input:
-  if(!assembly %in% c("hg19","hg18","hg17","hg16","mm7","mm8","mm9")){
-    stop("assembly must be one of hg19, hg18, hg17 or hg16",call.=FALSE)
+  if(!assembly %in% supported_assembly){
+    stop("Unsupported assembly", call. = FALSE)
   }
   
   #Check if logR and BAF are files:
