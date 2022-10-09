@@ -16,7 +16,7 @@ You can install the development version of copynumber from
 [GitHub](https://github.com/) with:
 
 ``` r
-pak::pkg_install("yunuuuu/copynumber")
+pak::pkg_install("Yunuuuu/copynumber")
 ```
 
 Similar work also can be found in

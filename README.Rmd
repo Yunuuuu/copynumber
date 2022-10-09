@@ -22,7 +22,7 @@ This is an modified version of the [copynumber](http://bioconductor.org/packages
 You can install the development version of copynumber from [GitHub](https://github.com/) with:
 
 ```r
-pak::pkg_install("yunuuuu/copynumber")
+pak::pkg_install("Yunuuuu/copynumber")
 ```
 
 Similar work also can be found in [aroneklund](https://github.com/aroneklund/copynumber), [igordot](https://github.com/igordot/copynumber) and [ShixiangWang](https://github.com/ShixiangWang/copynumber). Especially, [Irrationone](https://github.com/Irrationone/copynumber) provides a species-agnostic approach.
