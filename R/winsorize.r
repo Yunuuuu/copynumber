@@ -100,7 +100,7 @@ winsorize <- function(data, pos.unit="bp", arms=NULL, method="mad", tau=2.5, k=2
   
 	#Get character arms:
 	if(is.null(arms)){
-    arms <- getArms(num.chrom,pos,pos.unit,get(assembly))
+    arms <- getArms(num.chrom,pos,pos.unit,get_assembly(assembly))
 	}else{
     if(length(arms)!=nProbe){
       stop("'arms' must be the same length as number of rows in data",call.=FALSE)

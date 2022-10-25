@@ -1,9 +1,9 @@
 ####################################################################
-## Author: Gro Nilsen, Knut Liestøl and Ole Christian Lingjærde.
+## Author: Gro Nilsen, Knut Liestï¿½l and Ole Christian Lingjï¿½rde.
 ## Maintainer: Gro Nilsen <gronilse@ifi.uio.no>
 ## License: Artistic 2.0
 ## Part of the copynumber package
-## Reference: Nilsen and Liestøl et al. (2012), BMC Genomics
+## Reference: Nilsen and Liestï¿½l et al. (2012), BMC Genomics
 ####################################################################
 
 #Function that plots the frequency of deletions and amplifications given a threshold on the genome represented by a circle. Can also add arc to represent connections between different 
@@ -44,7 +44,7 @@ plotCircle <- function(segments,thres.gain,thres.loss=-thres.gain,pos.unit="bp",
   
   #Plot cytoband
 
-  cytoband = get(assembly)
+  cytoband = get_assembly(assembly)
   cyto.chr = substring(cytoband[,1],4)
   cyto.chr[grep("X",cyto.chr)] = 23
   cyto.chr[grep("Y",cyto.chr)] = 24

@@ -80,7 +80,7 @@ aspcf <- function(logR,BAF,pos.unit="bp",arms=NULL,kmin=5,gamma=40,baf.thres=c(0
   
   #Get character arms:
 	if(is.null(arms)){
-    arms <- getArms(num.chrom,position,pos.unit,get(assembly))
+    arms <- getArms(num.chrom,position,pos.unit,get_assembly(assembly))
 	}else{
     stopifnot(length(arms)==nProbe)
 	}

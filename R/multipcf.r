@@ -77,7 +77,7 @@ multipcf <- function(data,pos.unit="bp",arms=NULL,Y=NULL,gamma=40,normalize=TRUE
   
   #Get character arms:
 	if(is.null(arms)){
-    arms <- getArms(num.chrom,position,pos.unit,get(assembly))
+    arms <- getArms(num.chrom,position,pos.unit,get_assembly(assembly))
 	}else{
     stopifnot(length(arms)==nProbe)
 	}
