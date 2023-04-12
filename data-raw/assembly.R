@@ -3,8 +3,15 @@
 internal_data <- load("R/sysdata.rda")
 internal_data
 levels(hg19[["V1"]])
-fct_cols <- names(hg19)[vapply(hg19, is.factor, logical(1L))]
+if (!dir.exists("inst/extdata")) {
+    dir.create("inst/extdata")
+}
+for (i in internal_data) {
+    obj <- get(i, inherits = FALSE)
+    saveRDS(obj, file = file.path("inst/extdata", paste0(i, ".rds")))
+}
 
+fct_cols <- names(hg19)[vapply(hg19, is.factor, logical(1L))]
 # add hg38 assembly -------------------------------------------------
 if (!"hg38" %in% internal_data) {
     hg38 <- data.table::fread(
@@ -24,10 +31,4 @@ if (!"hg38" %in% internal_data) {
     }
     data.table::setDF(hg38)
 }
-usethis::use_data(
-    hg16, hg17, hg18, hg19, hg38,
-    mm7, mm8, mm9,
-    internal = TRUE,
-    overwrite = TRUE
-)
 

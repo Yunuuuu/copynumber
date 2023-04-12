@@ -49,9 +49,7 @@ winsorize <- function(data, pos.unit="bp", arms=NULL, method="mad", tau=2.5, k=2
   stopifnot(method %in% c("mad","pcf"))
   
   #Check assembly input:
-  if(!assembly %in% supported_assembly){
-    stop("Unsupported assembly", call. = FALSE)
-  }
+  validate_assembly(assembly)
   
   #Check data input: can either be a matrix/data frame or a filename
   stopifnot(class(data)%in%c("matrix","data.frame","character"))

@@ -28,9 +28,7 @@ multipcf <- function(data,pos.unit="bp",arms=NULL,Y=NULL,gamma=40,normalize=TRUE
   }
   
   #Check assembly input:
-  if(!assembly %in% supported_assembly){
-    stop("Unsupported assembly", call. = FALSE)
-  }
+  validate_assembly(assembly)
 
   #Is data a file:
   isfile.data <- class(data)=="character"

@@ -30,9 +30,7 @@ aspcf <- function(logR,BAF,pos.unit="bp",arms=NULL,kmin=5,gamma=40,baf.thres=c(0
   }
   
   #Check assembly input:
-  if(!assembly %in% supported_assembly){
-    stop("Unsupported assembly", call. = FALSE)
-  }
+  validate_assembly(assembly)
   
   #Check if logR and BAF are files:
   isfile.logR <- class(logR)=="character"

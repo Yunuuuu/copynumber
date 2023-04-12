@@ -1,50 +1,42 @@
-#' add new assembly to copynumber pakcage
-#' @param assembly A single symbol, indicates the genome assembly cytoBand
-#' should be added into copynumber package. the object name will be used by
-#' `copynumber` package to derive this object. `copynumber` use [get] function
-#' to find the object. If `NULL`, the supported_assembly will be returned
-#' directly. 
-#' @return a character vector of `supported_assembly` invisibly
-#' @export 
-add_assembly <- function(assembly = NULL) {
-    if (is.null(assembly)) return(invisible(supported_assembly))
-    envir <- topenv(environment(NULL))
-    assembly <- substitute(assembly)
-    if (!is.name(assembly)) {
-        stop("assembly must be a simple symbol", call. = FALSE)
-    }
-    name <- deparse(assembly)
-    supported_assembly <- c(supported_assembly, name)
-    if (!exists(name, envir = envir, inherits = FALSE)) {
-        unlockBinding("supported_assembly", envir)
-        assignInMyNamespace("supported_assembly", supported_assembly)
-        lockBinding("supported_assembly", envir)
-    } else {
-        stop(name, " already exits in copynumber package namespace")
-    }
-    invisible(supported_assembly)
-}
-
 supported_assembly <- c(
     "hg16", "hg17", "hg18", "hg19", "hg38",
     "mm7", "mm8", "mm9"
 )
 
+#' @keywords internal
 get_assembly <- function(x) {
-    data <- get(x, inherits = TRUE)
-    if (!inherits(data, "data.frame")) {
-        stop("assembly should be a data.frame", call. = FALSE)
-    }
-    data <- as.data.frame(data)
-    names(data) <- c("V1", "V2", "V3", "V4", "V5")
-    if (!is.factor(data$V1)) {
-        data$V1 <- factor(data$V1)
-    }
-    if (!is.factor(data$V4)) {
-        data$V4 <- factor(data$V4)
-    }
-    if (!is.factor(data$V5)) {
-        data$V5 <- factor(data$V5)
+    if (inherits(data, "data.frame")) {
+        data <- as.data.frame(data)[1:5]
+        names(data) <- c("V1", "V2", "V3", "V4", "V5")
+        for (i in c("V1", "V4", "V5")) {
+            if (!is.factor(data[[i]])) {
+                data[[i]] <- factor(data[[i]])
+            }
+        }
+    } else {
+        data <- system.file("extdata", x, package = "copynumber")
+        data <- readRDS(data)
     }
     data
+}
+
+validate_assembly <- function(x) {
+    if (is.character(x) && length(x) == 1L) {
+        if (!any(x == supported_assembly)) {
+            stop(sprintf(
+                "Only assembly %s can be supported, or you can provide a customized data.frame with at least 5 columns",
+                paste0(supported_assembly, collapse = ", ")
+            ), call. = FALSE)
+        }
+    } else if (inherits(x, "data.frame")) {
+        if (ncol(x) < 5L) {
+            stop("A customized assembly must have 5 columns", call. = FALSE)
+        }
+        message("Cytoband format must in follows:\nV1: chromosome\nV2: start_pos\nV3: end_pos\nV4: band\nV5: gieStain")
+    } else {
+        stop(sprintf(
+            "assembly must be a string (one of %s) or a data.frame",
+            paste0(supported_assembly, collapse = ", ")
+        ), call. = FALSE)
+    }
 }

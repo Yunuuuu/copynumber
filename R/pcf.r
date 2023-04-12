@@ -34,9 +34,7 @@ pcf <- function(data,pos.unit="bp",arms=NULL,Y=NULL,kmin=5,gamma=40,normalize=TR
   }
 
   #Check assembly input:
-  if(!assembly %in% supported_assembly){
-    stop("Unsupported assembly", call. = FALSE)
-  }
+  validate_assembly(assembly)
   
   #Is data a file:
   isfile.data <- class(data)=="character"
