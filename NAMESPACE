@@ -18,8 +18,7 @@ export(	winsorize,
 		callAberrations,
 		interpolate.pcf,
 		pcfPlain,
-		getGRangesFormat,
-		add_assembly
+		getGRangesFormat
 		)
 import(S4Vectors)
 importFrom(IRanges, IRanges)
