@@ -151,7 +151,7 @@ aspcf <- function(logR, BAF, pos.unit = "bp", arms = NULL, kmin = 5, gamma = 40,
     nSample <- length(sampleid)
 
     # Read just the two first columns to get chrom and pos
-    chrom.pos <- read.table(file = logR, sep = "\t", header = TRUE, colClasses = c(rep(NA, 2), rep("NULL", nSample)), as.is = TRUE) # chromosomes could be character or numeric
+    chrom.pos <- utils::read.table(file = logR, sep = "\t", header = TRUE, colClasses = c(rep(NA, 2), rep("NULL", nSample)), as.is = TRUE) # chromosomes could be character or numeric
     chrom <- chrom.pos[, 1]
     position <- chrom.pos[, 2]
   }
@@ -192,7 +192,7 @@ aspcf <- function(logR, BAF, pos.unit = "bp", arms = NULL, kmin = 5, gamma = 40,
   } else {
     f.BAF <- file(BAF, "r")
     ncol.BAF <- length(scan(f.BAF, nlines = 1, what = "character", quiet = TRUE, sep = "\t"))
-    nrow.BAF <- nrow(read.table(file = BAF, sep = "\t", header = TRUE, colClasses = c(NA, rep("NULL", ncol.BAF - 1)), as.is = TRUE))
+    nrow.BAF <- nrow(utils::read.table(file = BAF, sep = "\t", header = TRUE, colClasses = c(NA, rep("NULL", ncol.BAF - 1)), as.is = TRUE))
   }
   if (nrow.BAF != nProbe || ncol.BAF != nSample + 2) {
     stop("Input in BAF does not represent the same number of probes and samples as found in input in logR", call. = FALSE)
@@ -243,13 +243,13 @@ aspcf <- function(logR, BAF, pos.unit = "bp", arms = NULL, kmin = 5, gamma = 40,
     } else {
       # Read data for this arm from file; since f is a opened connection, the reading will start on the next line which has not already been read
       # skip two first columns
-      arm.logR <- read.table(f.logR, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
+      arm.logR <- utils::read.table(f.logR, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
     }
     if (!isfile.BAF) {
       arm.BAF <- BAF[probe.c, -c(1:2), drop = FALSE]
     } else {
       # Read data for this arm from file; since f is a opened connection, the reading will start on the next line which has not already been read
-      arm.BAF <- read.table(f.BAF, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
+      arm.BAF <- utils::read.table(f.BAF, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
     }
 
     # Checking that there are no missing values in logR:
@@ -349,10 +349,10 @@ aspcf <- function(logR, BAF, pos.unit = "bp", arms = NULL, kmin = 5, gamma = 40,
         w2 <- file(file.names[2], "w")
       }
       # Write estimated PCF-values file for this arm:
-      write.table(data.frame(chrom[probe.c], pos.c, logR.yhat.c, stringsAsFactors = FALSE), file = w1, col.names = if (c == 1) yhat.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
+      utils::write.table(data.frame(chrom[probe.c], pos.c, logR.yhat.c, stringsAsFactors = FALSE), file = w1, col.names = if (c == 1) yhat.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
 
       # Write segments to file for this arm
-      write.table(segments.c, file = w2, col.names = if (c == 1) seg.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
+      utils::write.table(segments.c, file = w2, col.names = if (c == 1) seg.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
     }
 
     # Append to results for other arms:

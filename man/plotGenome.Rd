@@ -69,9 +69,9 @@ option. If the number of plots exceeds the desired page layout, the user is
 prompted before advancing to the next page of output.
 }
 \note{
-This function applies \code{par(fig)}, and is therefore not compatible
+This function applies \code{graphics::par(fig)}, and is therefore not compatible
 with other setups for arranging multiple plots in one device such as
-\code{par(mfrow,mfcol)}.
+\code{graphics::par(mfrow,mfcol)}.
 }
 \examples{
 
@@ -115,8 +115,8 @@ plotGenome(
 # example segments which are above 0.2 or below -0.2 are considered aberrated
 # regions:
 plotGenome(segments = uni.segments, sample = 5, connect = FALSE)
-abline(h = 0.2, col = "blue", lty = 5)
-abline(h = -0.2, col = "blue", lty = 5)
+graphics::abline(h = 0.2, col = "blue", lty = 5)
+graphics::abline(h = -0.2, col = "blue", lty = 5)
 
 }
 \seealso{

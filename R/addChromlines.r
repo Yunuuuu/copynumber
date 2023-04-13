@@ -57,15 +57,15 @@ addChromlines <- function(chromosomes, xaxis, unit, ind = NULL, cex, op) {
   arg <- list(chrom.lwd = 1, chrom.lty = 2, chrom.col = "darkgrey", chrom.side = 3, chrom.cex = cex, chrom.line = c(0, 0.3))
 
   if (!is.null(op)) {
-    arg <- modifyList(arg, op)
+    arg <- utils::modifyList(arg, op)
   }
-  abline(v = chrom.mark[2:(length(chrom.mark) - 1)], col = arg$chrom.col, lwd = arg$chrom.lwd, lty = arg$chrom.lty)
+  graphics::abline(v = chrom.mark[2:(length(chrom.mark) - 1)], col = arg$chrom.col, lwd = arg$chrom.lwd, lty = arg$chrom.lty)
 
   at <- (chrom.mark[1:nChrom] - 1) + (chrom.mark[2:(nChrom + 1)] - chrom.mark[1:nChrom])/2
   chrom.names <- unique(chromosomes)
   # Plot half at bottom, half at top:
   bot <- seq(1, length(chrom.mark), 2)
   top <- seq(2, length(chrom.mark), 2)
-  mtext(chrom.names[bot], side = 1, line = arg$chrom.line[1], at = at[bot], cex = arg$chrom.cex)
-  mtext(chrom.names[top], side = 3, line = arg$chrom.line[2], at = at[top], cex = arg$chrom.cex)
+  graphics::mtext(chrom.names[bot], side = 1, line = arg$chrom.line[1], at = at[bot], cex = arg$chrom.cex)
+  graphics::mtext(chrom.names[top], side = 3, line = arg$chrom.line[2], at = at[top], cex = arg$chrom.cex)
 } # endaddChromlines

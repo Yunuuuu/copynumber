@@ -78,9 +78,9 @@
 #' margin line where the sample labels should be written, starting at 0
 #' counting outwards. Default is 0.2.} \item{list("sample.cex")}{the size of
 #' the sample labels.} }
-#' @note This function applies \code{par(fig)}, and is therefore not compatible
+#' @note This function applies \code{graphics::par(fig)}, and is therefore not compatible
 #' with other setups for arranging multiple plots in one device such as
-#' \code{par(mfrow,mfcol)}.
+#' \code{graphics::par(mfrow,mfcol)}.
 #' @author Gro Nilsen
 #' @examples
 #'
@@ -177,8 +177,8 @@ genomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampleID,
 
 
   # Check if there should be more than one file/window with plot(s), and get file.name accordingly
-  if (dev.cur() <= 1) { # to make Sweave work
-    dev.new(width = op$plot.size[1], height = op$plot.size[2], record = TRUE)
+  if (grDevices::dev.cur() <= 1) { # to make Sweave work
+    grDevices::dev.new(width = op$plot.size[1], height = op$plot.size[2], record = TRUE)
   }
 
   # Initialize:
@@ -193,7 +193,7 @@ genomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampleID,
   for (t in 1:nT) {
     # Frame dimensions for plot t:
     fig.t <- c(frames$left[clm], frames$right[clm], frames$bot[row], frames$top[row])
-    par(fig = fig.t, new = new, oma = c(0, 0, 0.5, 0), mar = op$mar)
+    graphics::par(fig = fig.t, new = new, oma = c(0, 0, 0.5, 0), mar = op$mar)
 
     # Empty plot with correct dimensions:
     plot(1, 1,
@@ -201,13 +201,13 @@ genomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampleID,
       xaxs = "i", yaxt = "n", xaxt = "n", yaxs = "i", cex.lab = 0.9, mgp = op$mgp, main = ""
     )
     # Let background be white:
-    rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = "white")
+    graphics::rect(graphics::par("usr")[1], graphics::par("usr")[3], graphics::par("usr")[2], graphics::par("usr")[4], col = "white")
     # Add shifting white/grey pattern to backgroud to separate chromosomes:
     chromPattern(pos.unit, op)
 
 
     # main title for this plot
-    title(main = op$main[t], line = op$main.line, cex.main = op$cex.main)
+    graphics::title(main = op$main[t], line = op$main.line, cex.main = op$cex.main)
 
 
     # Plot heatmap for each sample:
@@ -229,11 +229,11 @@ genomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampleID,
       ybottom <- i - (1 - op$sep.samples)
 
       # Plot rectangles with appropriate color for each probe:
-      rect(xleft, ybottom, xright, ytop, col = heat.col, border = NA)
+      graphics::rect(xleft, ybottom, xright, ytop, col = heat.col, border = NA)
 
       # Add sampleid on yaxis
       if (op$sample.labels) {
-        axis(side = 2, at = (ytop - (ytop - ybottom)/2), labels = sampleID[i], line = op$sample.line, tcl = 0, cex.axis = op$sample.cex, las = 1, mgp = op$mgp, tick = FALSE)
+        graphics::axis(side = 2, at = (ytop - (ytop - ybottom)/2), labels = sampleID[i], line = op$sample.line, tcl = 0, cex.axis = op$sample.cex, las = 1, mgp = op$mgp, tick = FALSE)
       }
     } # endfor
 
@@ -244,13 +244,13 @@ genomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampleID,
     addArmlines(chromosomes = segments[, 2], xaxis = "pos", unit = pos.unit, cex = op$cex.chrom, op = op)
 
     # Box:
-    abline(v = op$xlim)
-    abline(h = c(0, nSample))
+    graphics::abline(v = op$xlim)
+    graphics::abline(h = c(0, nSample))
 
     # Get new page, or update column/row:
     if (t %% (nr * nc) == 0) {
       # Start new plot page (prompted by user)
-      devAskNewPage(ask = TRUE)
+      grDevices::devAskNewPage(ask = TRUE)
 
       # Reset columns and row in layout:
       clm <- 1
@@ -319,8 +319,8 @@ chromosomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampl
   # make separate plots for each value of limits
   for (t in 1:nT) {
     # Start new window/file:
-    if (dev.cur() <= 1) { # to make Sweave work
-      dev.new(width = op$plot.size[1], height = op$plot.size[2], record = TRUE)
+    if (grDevices::dev.cur() <= 1) { # to make Sweave work
+      grDevices::dev.new(width = op$plot.size[1], height = op$plot.size[2], record = TRUE)
     }
 
     # Initialize row and column index:
@@ -332,7 +332,7 @@ chromosomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampl
     for (c in 1:nChrom) {
       # Frame dimensions for plot c:
       fig.c <- c(frames$left[clm], frames$right[clm], frames$bot[row], frames$top[row])
-      par(fig = fig.c, new = new, oma = oma, mar = mar)
+      graphics::par(fig = fig.c, new = new, oma = oma, mar = mar)
 
       # Make list with frame dimensions:
       frame.c <- list(left = frames$left[clm], right = frames$right[clm], bot = frames$bot[row], top = frames$top[row])
@@ -354,7 +354,7 @@ chromosomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampl
         ideo.frame <- frame.c
         ideo.frame$top <- frame.c$bot + (frame.c$top - frame.c$bot) * op$ideo.frac
 
-        par(fig = unlist(ideo.frame), new = new, mar = op$mar.i)
+        graphics::par(fig = unlist(ideo.frame), new = new, mar = op$mar.i)
         # Plot ideogram and get maximum probe position in ideogram:
         plotIdeogram(chrom = k, cyto.text = op$cyto.text, cyto.data = op$assembly, cex = op$cex.cytotext, unit = op$plot.unit)
 
@@ -367,7 +367,7 @@ chromosomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampl
 
       # Plot-dimensions:
       frame.c$bot <- frame.c$bot + (frame.c$top - frame.c$bot) * op$ideo.frac
-      par(fig = unlist(frame.c), new = new, mar = op$mar)
+      graphics::par(fig = unlist(frame.c), new = new, mar = op$mar)
 
       # Limits:
       if (!is.null(op$xlim)) {
@@ -381,10 +381,10 @@ chromosomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampl
       )
 
       # Let background be white:
-      rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = "white")
+      graphics::rect(graphics::par("usr")[1], graphics::par("usr")[3], graphics::par("usr")[2], graphics::par("usr")[4], col = "white")
 
       # main title for this plot
-      title(main = op$main[c], line = op$main.line, cex.main = op$cex.main)
+      graphics::title(main = op$main[c], line = op$main.line, cex.main = op$cex.main)
 
       # Plot heatmap for each sample:
       for (i in 1:nSample) {
@@ -403,34 +403,34 @@ chromosomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampl
         ytop <- i - op$sep.samples
         ybottom <- i - (1 - op$sep.samples)
 
-        rect(xleft, ybottom, xright, ytop, col = heat.col, border = NA)
+        graphics::rect(xleft, ybottom, xright, ytop, col = heat.col, border = NA)
 
         # Add sampleid on yaxis
         if (op$sample.labels) {
-          axis(side = 2, at = (ytop - (ytop - ybottom)/2), labels = sampleID[i], line = op$sample.line, tcl = 0, cex.axis = op$sample.cex, las = 1, mgp = op$mgp, tick = FALSE)
+          graphics::axis(side = 2, at = (ytop - (ytop - ybottom)/2), labels = sampleID[i], line = op$sample.line, tcl = 0, cex.axis = op$sample.cex, las = 1, mgp = op$mgp, tick = FALSE)
         }
       } # endfor
 
       if (!op$plot.ideo) {
         # Add xaxis:
         at.x <- get.xticks(xlim[1], xlim[2], unit = op$plot.unit, ideal.n = 6)
-        axis(side = 1, tcl = -0.2, at = at.x, cex.axis = op$cex.axis, mgp = op$mgp)
-        title(xlab = op$xlab, cex.lab = op$cex.lab, line = op$mgp[1])
+        graphics::axis(side = 1, tcl = -0.2, at = at.x, cex.axis = op$cex.axis, mgp = op$mgp)
+        graphics::title(xlab = op$xlab, cex.lab = op$cex.lab, line = op$mgp[1])
       }
 
 
       # Add box around plot:
-      abline(v = xlim)
-      abline(h = c(0, nSample))
+      graphics::abline(v = xlim)
+      graphics::abline(h = c(0, nSample))
 
 
 
       # If page is full; start plotting on new page
       if (c %% (nr * nc) == 0 && c != nChrom) {
         # Add main title to page:
-        title(op$title[t], outer = TRUE)
+        graphics::title(op$title[t], outer = TRUE)
 
-        devAskNewPage(ask = TRUE)
+        grDevices::devAskNewPage(ask = TRUE)
 
         # Reset columns and row in layout:
         clm <- 1
@@ -449,9 +449,9 @@ chromosomeAberration <- function(segments, upper.lim, lower.lim, pos.unit, sampl
     } # endfor
 
     # Add main title to page:
-    title(op$title[t], outer = TRUE)
+    graphics::title(op$title[t], outer = TRUE)
     if (t != nT) {
-      devAskNewPage(ask = TRUE)
+      grDevices::devAskNewPage(ask = TRUE)
     }
   } # endfor
 } # endfunction

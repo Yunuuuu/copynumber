@@ -91,9 +91,9 @@
 #' \code{las}, \code{tcl}, \code{mar} and \code{mgp} (see \code{\link{par}} on
 #' these). In addition, a range of graphical arguments specific for copy number
 #' plots may be specified, see \code{\link{plotSample}} on these.
-#' @note This function applies \code{par(fig)}, and is therefore not compatible
+#' @note This function applies \code{graphics::par(fig)}, and is therefore not compatible
 #' with other setups for arranging multiple plots in one device such as
-#' \code{par(mfrow,mfcol)}.
+#' \code{graphics::par(mfrow,mfcol)}.
 #' @author Gro Nilsen
 #' @examples
 #'
@@ -165,8 +165,8 @@ plotAllele <- function(logR = NULL, BAF = NULL, segments = NULL, pos.unit = "bp"
   mar2[3] <- 0.3 * arg$f
 
   # Two separate arg-lists for logR and BAF
-  arg1 <- modifyList(arg, list(xlab = "", ylab = arg$ylab[1], h = arg$h[1], mar = mar1))
-  arg2 <- modifyList(arg, list(ylab = arg$ylab[2], h = arg$h[2], main = "", mar = mar2, connect = FALSE))
+  arg1 <- utils::modifyList(arg, list(xlab = "", ylab = arg$ylab[1], h = arg$h[1], mar = mar1))
+  arg2 <- utils::modifyList(arg, list(ylab = arg$ylab[2], h = arg$h[2], main = "", mar = mar2, connect = FALSE))
 
 
   # Separate plots for each sample:
@@ -176,16 +176,16 @@ plotAllele <- function(logR = NULL, BAF = NULL, segments = NULL, pos.unit = "bp"
     if (!arg$onefile || i == 1) {
       # Either print to file, or plot on screen
       if (!is.null(arg$dir.print)) {
-        pdf(file = paste(arg$dir.print, "/", file.name[i], ".pdf", sep = ""), width = arg$plot.size[1], height = arg$plot.size[2], onefile = TRUE, paper = "a4") # a4-paper
+        grDevices::pdf(file = paste(arg$dir.print, "/", file.name[i], ".pdf", sep = ""), width = arg$plot.size[1], height = arg$plot.size[2], onefile = TRUE, paper = "a4") # a4-paper
       } else {
-        if (dev.cur() <= i) { # to make Sweave work
-          dev.new(width = arg$plot.size[1], height = arg$plot.size[2], record = TRUE)
+        if (grDevices::dev.cur() <= i) { # to make Sweave work
+          grDevices::dev.new(width = arg$plot.size[1], height = arg$plot.size[2], record = TRUE)
         }
       }
     } else {
       # Start new page when prompted by user:
       if (is.null(arg$dir.print)) {
-        devAskNewPage(ask = TRUE)
+        grDevices::devAskNewPage(ask = TRUE)
       }
     }
 
@@ -201,8 +201,8 @@ plotAllele <- function(logR = NULL, BAF = NULL, segments = NULL, pos.unit = "bp"
     # Get data limits for this sample if range should include all chromosomes (equalRange=TRUE)
     if (!is.null(logR) && arg$equalRange) {
       all.chrom <- which(logR[, 1] %in% chrom)
-      data.lim1 <- quantile(logR[all.chrom, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
-      data.lim2 <- quantile(BAF[all.chrom, ind.sample], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
+      data.lim1 <- stats::quantile(logR[all.chrom, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
+      data.lim2 <- stats::quantile(BAF[all.chrom, ind.sample], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
     }
 
     # Picking out all segments where sampleid (in first column) is id, returns new list
@@ -217,11 +217,11 @@ plotAllele <- function(logR = NULL, BAF = NULL, segments = NULL, pos.unit = "bp"
     for (c in 1:nChrom) {
       # Frame dimensions for plot c:
       fig.c <- c(frames$left[clm], frames$right[clm], frames$bot[row], frames$top[row])
-      par(fig = fig.c, new = new, oma = oma, mar = mar)
+      graphics::par(fig = fig.c, new = new, oma = oma, mar = mar)
       frame.c <- list(left = frames$left[clm], right = frames$right[clm], bot = frames$bot[row], top = frames$top[row])
 
       # Insure that plot region is the same for logR and BAF despite different margins:
-      fin <- par("fin") # This figure's width and height
+      fin <- graphics::par("fin") # This figure's width and height
       fig.lines <- fin[2]/0.2 # Number of horizontal lines in this figure
       logR.frac <- (fig.lines - fig.lines * arg$ideo.frac + (mar1[1] + mar1[3]) - (mar2[1] + mar2[3]))/(2 * fig.lines)
       baf.frac <- 1 - arg$ideo.frac - logR.frac
@@ -257,7 +257,7 @@ plotAllele <- function(logR = NULL, BAF = NULL, segments = NULL, pos.unit = "bp"
         xmax <- chromMax(chrom = k, cyto.data = arg$assembly, pos.unit = arg$plot.unit)
         # PLOT IDEOGRAM
         figi <- ideo.frame
-        par(fig = figi, new = new, mar = arg$mar.i)
+        graphics::par(fig = figi, new = new, mar = arg$mar.i)
         plotIdeogram(chrom = k, arg$cyto.text, cyto.data = arg$assembly, cex = arg$cex.cytotext, unit = arg$plot.unit)
         new <- TRUE
       } else {
@@ -272,7 +272,7 @@ plotAllele <- function(logR = NULL, BAF = NULL, segments = NULL, pos.unit = "bp"
         ind.chrom <- which(logR[, 1] == k)
         if (!arg$equalRange) {
           # Get data limits for this sample using just this chromosome (equalRange=FALSE)
-          data.lim1 <- quantile(logR[ind.chrom, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
+          data.lim1 <- stats::quantile(logR[ind.chrom, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
         }
 
         # plot logR
@@ -303,7 +303,7 @@ plotAllele <- function(logR = NULL, BAF = NULL, segments = NULL, pos.unit = "bp"
 
         # Add segmentation legends:
         if (!is.null(arg$legend)) {
-          legend("topright", legend = arg$legend, col = arg$seg.col, lty = arg$seg.lty, cex = arg$cex.axis)
+          graphics::legend("topright", legend = arg$legend, col = arg$seg.col, lty = arg$seg.lty, cex = arg$cex.axis)
         }
       }
 
@@ -312,7 +312,7 @@ plotAllele <- function(logR = NULL, BAF = NULL, segments = NULL, pos.unit = "bp"
       if (!is.null(BAF)) {
         if (!arg$equalRange) {
           # Get data limits for this sample using just this chromosome (equalRange=FALSE)
-          data.lim2 <- quantile(BAF[ind.chrom, ind.sample], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
+          data.lim2 <- stats::quantile(BAF[ind.chrom, ind.sample], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
         }
         # plot BAF:
         plotObs(BAF[ind.chrom, ind.sample],
@@ -350,7 +350,7 @@ plotAllele <- function(logR = NULL, BAF = NULL, segments = NULL, pos.unit = "bp"
 
         # Add segmentation legends:
         if (!is.null(arg$legend)) {
-          legend("topright", legend = arg$legend, col = arg$seg.col, lty = arg$seg.lty, cex = arg$cex.axis)
+          graphics::legend("topright", legend = arg$legend, col = arg$seg.col, lty = arg$seg.lty, cex = arg$cex.axis)
         }
       }
 
@@ -359,11 +359,11 @@ plotAllele <- function(logR = NULL, BAF = NULL, segments = NULL, pos.unit = "bp"
       # If page is full; plot on new page
       if (c %% (nr * nc) == 0) {
         # Add main title to page:
-        title(arg$title[i], outer = TRUE)
+        graphics::title(arg$title[i], outer = TRUE)
 
         # Start new page when prompted by user:
         if (is.null(arg$dir.print)) {
-          devAskNewPage(ask = TRUE)
+          grDevices::devAskNewPage(ask = TRUE)
         }
 
         # Reset columns and row in layout:
@@ -384,17 +384,17 @@ plotAllele <- function(logR = NULL, BAF = NULL, segments = NULL, pos.unit = "bp"
 
     # Plot sampleid as title
 
-    title(arg$title[i], outer = TRUE)
+    graphics::title(arg$title[i], outer = TRUE)
 
     # Close graphcis:
     if (!is.null(arg$dir.print)) {
       if (!arg$onefile) {
         cat("Plot was saved in ", paste(arg$dir.print, "/", file.name[i], ".pdf", sep = ""), "\n")
-        graphics.off()
+        grDevices::graphics.off()
       } else {
         if (i == nSample) {
           cat("Plot was saved in ", paste(arg$dir.print, "/", file.name, ".pdf", sep = ""), "\n")
-          graphics.off()
+          grDevices::graphics.off()
         }
       }
     } # endif

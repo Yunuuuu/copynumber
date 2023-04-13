@@ -68,7 +68,7 @@ plotSegments <- function(type, segments, unit, xaxis, k = NULL, sampleID = NULL,
     # Plotting:
     if (add) {
       # add segments to existing plot:
-      segments(x0 = use.start, y0 = seg.mean, x1 = use.stop, y1 = seg.mean, col = col, lwd = lwd, lty = lty)
+      graphics::segments(x0 = use.start, y0 = seg.mean, x1 = use.stop, y1 = seg.mean, col = col, lwd = lwd, lty = lty)
 
       # Should segments be connected?
       if (op$connect) {
@@ -93,14 +93,14 @@ plotSegments <- function(type, segments, unit, xaxis, k = NULL, sampleID = NULL,
       # PLOTTING:
 
       # Empty plot with desired dimensions:
-      par(fig = unlist(frame), new = new, mar = op$mar)
+      graphics::par(fig = unlist(frame), new = new, mar = op$mar)
       plot(1, 1,
         type = "n", main = "", xlab = "",
         xlim = op$xlim, las = op$las, ylab = "", ylim = op$ylim, xaxt = "n", yaxt = "n", xaxs = "i"
       )
 
       # Plot segments
-      segments(x0 = use.start, y0 = seg.mean, x1 = use.stop, y1 = seg.mean, col = col, lwd = lwd, lty = lty)
+      graphics::segments(x0 = use.start, y0 = seg.mean, x1 = use.stop, y1 = seg.mean, col = col, lwd = lwd, lty = lty)
 
       # Should segments be connected?
       if (op$connect) {

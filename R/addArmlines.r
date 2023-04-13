@@ -29,8 +29,8 @@ addArmlines <- function(chromosomes, xaxis, unit, ind = NULL, cex, op) {
     arg <- list(chrom.lwd = 1, chrom.lty = 2, chrom.col = "darkgrey", chrom.side = 3, chrom.cex = cex, chrom.line = c(0, 0.3))
 
     if (!is.null(op)) {
-      arg <- modifyList(arg, op)
+      arg <- utils::modifyList(arg, op)
     }
-    abline(v = arm.mark[1:(length(arm.mark) - 1)], col = arg$chrom.col, lwd = arg$chrom.lwd, lty = 2)
+    graphics::abline(v = arm.mark[1:(length(arm.mark) - 1)], col = arg$chrom.col, lwd = arg$chrom.lwd, lty = 2)
   }
 }

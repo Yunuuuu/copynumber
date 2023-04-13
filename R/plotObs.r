@@ -64,7 +64,7 @@ plotObs <- function(type, y, pos, unit, winsoutliers, xaxis, plot.ideo = FALSE, 
   # PLOT OBSERVED DATA:
 
   # Empty plot with right dimensions:
-  par(fig = unlist(frame), new = new, mar = op$mar)
+  graphics::par(fig = unlist(frame), new = new, mar = op$mar)
   plot(x, y, ylab = "", xlab = "", main = "", pch = pch.obs, cex = cex.obs, col = colobs, ylim = op$ylim, xlim = op$xlim, xaxt = "n", yaxt = "n", xaxs = "i", yaxs = "r")
 
   # Add axes, labels, title and reference line

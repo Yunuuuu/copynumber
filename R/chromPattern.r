@@ -27,10 +27,10 @@ chromPattern <- function(pos.unit, op) {
   # chrom.mark <- chrom.mark[-length(chrom.mark)]
   # }
   # Let background be black to avoid white parts in arms without probes:
-  # rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = "white")
+  # graphics::rect(graphics::par("usr")[1], graphics::par("usr")[3], graphics::par("usr")[2], graphics::par("usr")[4], col = "white")
   for (i in 1:(length(chrom.mark) - 1)) {
     if (i %% 2 == 0) {
-      rect(chrom.mark[i], par("usr")[3], chrom.mark[i + 1], par("usr")[4], col = "grey95") # , border=NA)
+      graphics::rect(chrom.mark[i], graphics::par("usr")[3], chrom.mark[i + 1], graphics::par("usr")[4], col = "grey95") # , border=NA)
     }
   }
 }

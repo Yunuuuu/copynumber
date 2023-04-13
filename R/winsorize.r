@@ -156,7 +156,7 @@ winsorize <- function(data, pos.unit = "bp", arms = NULL, method = "mad", tau = 
     nSample <- length(sample.names)
 
     # Read just the two first columns to get chrom and pos
-    chrom.pos <- read.table(file = data, sep = "\t", header = TRUE, colClasses = c(rep(NA, 2), rep("NULL", nSample)), as.is = TRUE) # chromosomes could be character or numeric
+    chrom.pos <- utils::read.table(file = data, sep = "\t", header = TRUE, colClasses = c(rep(NA, 2), rep("NULL", nSample)), as.is = TRUE) # chromosomes could be character or numeric
     chrom <- chrom.pos[, 1]
     pos <- chrom.pos[, 2]
   }
@@ -229,7 +229,7 @@ winsorize <- function(data, pos.unit = "bp", arms = NULL, method = "mad", tau = 
     } else {
       # Read data for this arm from file; since f is a opened connection, the reading will start on the next line which has not already been read
       # two first columns are skipped
-      arm.data <- read.table(f, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
+      arm.data <- utils::read.table(f, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
     }
     # Make sure data is numeric:
     if (any(!sapply(arm.data, is.numeric))) {
@@ -281,9 +281,9 @@ winsorize <- function(data, pos.unit = "bp", arms = NULL, method = "mad", tau = 
         wd <- file(file.names[1], "w")
         wo <- file(file.names[2], "w")
       }
-      write.table(data.frame(chrom[probe.c], pos[probe.c], wins.data.c, stringsAsFactors = FALSE), file = wd, col.names = if (c == 1) c("chrom", "pos", sample.names) else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
+      utils::write.table(data.frame(chrom[probe.c], pos[probe.c], wins.data.c, stringsAsFactors = FALSE), file = wd, col.names = if (c == 1) c("chrom", "pos", sample.names) else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
 
-      write.table(data.frame(chrom[probe.c], pos[probe.c], wins.outliers.c, stringsAsFactors = FALSE), file = wo, col.names = if (c == 1) c("chrom", "pos", sample.names) else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
+      utils::write.table(data.frame(chrom[probe.c], pos[probe.c], wins.outliers.c, stringsAsFactors = FALSE), file = wo, col.names = if (c == 1) c("chrom", "pos", sample.names) else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
     }
 
     if (verbose) {
@@ -323,7 +323,7 @@ winsorize <- function(data, pos.unit = "bp", arms = NULL, method = "mad", tau = 
 madWins <- function(x, tau, k, digits) {
   xhat <- medianFilter(x, k)
   d <- x - xhat
-  SD <- mad(d)
+  SD <- stats::mad(d)
   z <- tau * SD
   xwin <- xhat + psi(d, z)
   outliers <- rep(0, length(x))
@@ -340,7 +340,7 @@ pcfWins <- function(x, tau, k, gamma, iter, digits) {
   xhat <- medianFilter(x, k)
   for (j in 1:iter) {
     d <- x - xhat
-    sdev <- mad(d)
+    sdev <- stats::mad(d)
     z <- tau * sdev
     xwin <- xhat + pmax(pmin(d, z), -z)
     if (length(x) < 400) {
@@ -349,7 +349,7 @@ pcfWins <- function(x, tau, k, gamma, iter, digits) {
       xhat <- selectFastPcf(x = xwin, gamma = gamma * sdev^2, kmin = 5, yest = TRUE)$yhat
     }
   }
-  sdev <- mad(xwin - xhat)
+  sdev <- stats::mad(xwin - xhat)
   z <- tau * sdev
   xwin <- xhat + psi(x - xhat, z)
   outliers <- rep(0, length(x))

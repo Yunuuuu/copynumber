@@ -56,7 +56,7 @@ getPlotParameters <- function(type, cr, nSeg, sampleID = NULL, chrom = NULL, plo
     h.col = "darkgrey",
     cyto.text = FALSE,
     plot.unit = "mbp",
-    seg.col = rainbow(nSeg),
+    seg.col = grDevices::rainbow(nSeg),
     seg.lty = rep(1, nSeg),
     connect = TRUE,
     equalRange = TRUE,
@@ -111,7 +111,7 @@ getPlotParameters <- function(type, cr, nSeg, sampleID = NULL, chrom = NULL, plo
 
 
   # Check for USER MODIFICATIONS:
-  arg <- modifyList(arg, list(...))
+  arg <- utils::modifyList(arg, list(...))
 
   # Set assembly to refer to stored data instead of character string:
   arg$assembly <- get_assembly(arg$assembly)

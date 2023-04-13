@@ -69,9 +69,9 @@ shown in white. Each row in the plot represents a sample, while probe
 positions are reflected along the x-axis.
 }
 \note{
-This function applies \code{par(fig)}, and is therefore not compatible
+This function applies \code{graphics::par(fig)}, and is therefore not compatible
 with other setups for arranging multiple plots in one device such as
-\code{par(mfrow,mfcol)}.
+\code{graphics::par(mfrow,mfcol)}.
 }
 \examples{
 

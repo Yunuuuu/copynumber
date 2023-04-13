@@ -40,7 +40,7 @@ medianFilter <- function(x, k) {
     }
   }
 
-  runMedian <- runmed(x, k = filtWidth, endrule = "median")
+  runMedian <- stats::runmed(x, k = filtWidth, endrule = "median")
 
   return(runMedian)
 }

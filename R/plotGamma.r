@@ -98,9 +98,9 @@
 #' applied.} \item{pred.error}{the average prediction error for each value of
 #' gamma.} \item{opt.gamma}{the gamma for which the average prediction error is
 #' minimized.}
-#' @note This function applies \code{par(fig)}, and is therefore not compatible
+#' @note This function applies \code{graphics::par(fig)}, and is therefore not compatible
 #' with other setups for arranging multiple plots in one device such as
-#' \code{par(mfrow,mfcol)}.
+#' \code{graphics::par(mfrow,mfcol)}.
 #' @author Gro Nilsen, Knut Liestoel, Ole Christian Lingjaerde
 #' @seealso \code{\link{pcf}},\code{\link{winsorize}}
 #' @examples
@@ -135,7 +135,7 @@ plotGamma <- function(data, pos.unit = "bp", gammaRange = c(10, 100), dowins = T
   xlim <- c(0, max(x))
   # Take out the 5% most extreme observations:
   q <- 0.00
-  data.ylim <- quantile(use.data[, 3], probs = c(q/2, (1 - q/2)), names = FALSE, type = 4, na.rm = TRUE)
+  data.ylim <- stats::quantile(use.data[, 3], probs = c(q/2, (1 - q/2)), names = FALSE, type = 4, na.rm = TRUE)
 
   # tickmarks:
   at.x <- get.xticks(xlim[1], xlim[2], unit = "mbp", ideal.n = 6)
@@ -149,19 +149,19 @@ plotGamma <- function(data, pos.unit = "bp", gammaRange = c(10, 100), dowins = T
   cex.main <- 1.1
   tcl <- -0.25
   # get rgb components:
-  q <- col2rgb(col)
-  col2 <- rgb(q[1], q[2], q[3], maxColorValue = 255, alpha = 100)
+  q <- grDevices::col2rgb(col)
+  col2 <- grDevices::rgb(q[1], q[2], q[3], maxColorValue = 255, alpha = 100)
 
   # empty plot
   plot.size <- c(11.6, 8.2)
-  if (dev.cur() <= 1) { # to make Sweave work
-    dev.new(width = plot.size[1], height = plot.size[2])
+  if (grDevices::dev.cur() <= 1) { # to make Sweave work
+    grDevices::dev.new(width = plot.size[1], height = plot.size[2])
   }
-  par(mfrow = c(4, 3), oma = c(3, 3, 1, 0), mar = c(1, 1, 2, 1))
+  graphics::par(mfrow = c(4, 3), oma = c(3, 3, 1, 0), mar = c(1, 1, 2, 1))
 
   # Plot data or wins data
   plot(x, use.data[, 3], ylab = "", xlab = "", main = "data", pch = ".", cex = cex, cex.main = cex.main, col = col, xlim = xlim, xaxt = "n", yaxt = "n", xaxs = "i", yaxs = "i", ylim = data.ylim)
-  axis(side = 2, cex.axis = cex.axis, at = at.y, mgp = mgp.y, las = 1, tcl = tcl)
+  graphics::axis(side = 2, cex.axis = cex.axis, at = at.y, mgp = mgp.y, las = 1, tcl = tcl)
 
   # Find vector of gammas to be applied:
   gamma <- seq(from = gammaRange[1], to = gammaRange[2], length.out = nGamma)
@@ -179,11 +179,11 @@ plotGamma <- function(data, pos.unit = "bp", gammaRange = c(10, 100), dowins = T
     plot(x, use.data[, 3], ylab = "", xlab = "", main = paste("gamma = ", gamma[g], sep = ""), pch = ".", cex = cex, cex.main = cex.main, col = col2, xlim = xlim, xaxt = "n", yaxt = "n", xaxs = "i", yaxs = "i", ylim = data.ylim)
     if (g > 8) {
       # add xaxis
-      axis(side = 1, cex.axis = cex.axis, at = at.x, labels = as.integer(at.x), mgp = mgp.x, tcl = tcl)
+      graphics::axis(side = 1, cex.axis = cex.axis, at = at.x, labels = as.integer(at.x), mgp = mgp.x, tcl = tcl)
     }
     if (g %in% c(3, 6, 9)) {
       # add yaxis
-      axis(side = 2, cex.axis = cex.axis, at = at.y, mgp = mgp.y, las = 1, tcl = tcl)
+      graphics::axis(side = 2, cex.axis = cex.axis, at = at.y, mgp = mgp.y, las = 1, tcl = tcl)
     }
 
     # Plot segments
@@ -192,7 +192,7 @@ plotGamma <- function(data, pos.unit = "bp", gammaRange = c(10, 100), dowins = T
     # Adjust start and stop such that segments are connected, and x-axis is represented as mbp
     a <- adjustSeg(chrom = use.seg[, 2], char.arms = use.seg[, 3], start = use.seg[, 4], stop = use.seg[, 5], nPos = use.seg[, 6], type = "sample", xaxis = "pos", unit = pos.unit, connect = TRUE, op = list(plot.unit = "mbp"))
 
-    segments(x0 = a$use.start, y0 = use.seg[, 7], x1 = a$use.stop, y1 = use.seg[, 7], col = seg.col, lwd = 1, lty = 1)
+    graphics::segments(x0 = a$use.start, y0 = use.seg[, 7], x1 = a$use.stop, y1 = use.seg[, 7], col = seg.col, lwd = 1, lty = 1)
 
     # Connect segments vertically:
     connectSeg(a$sep.arm, nSeg = nrow(use.seg), a$use.stop, seg.mean = use.seg[, 7], col = seg.col, lwd = 1, lty = 1)
@@ -201,24 +201,24 @@ plotGamma <- function(data, pos.unit = "bp", gammaRange = c(10, 100), dowins = T
 
   # Plot number of segments for each gamma in last panel:
   if (cv) {
-    par(mar = c(1, 2, 2, 3)) # ,oma=c(2,0,0,0))
+    graphics::par(mar = c(1, 2, 2, 3)) # ,oma=c(2,0,0,0))
     plot(gamma, nSeg, xlab = "", ylab = "", axes = FALSE, main = "", type = "b", pch = 19, col = "black", yaxs = "r")
 
-    axis(side = 1, cex.axis = cex.axis, mgp = mgp.x, tcl = tcl, at = gamma)
+    graphics::axis(side = 1, cex.axis = cex.axis, mgp = mgp.x, tcl = tcl, at = gamma)
 
-    box()
-    par(xpd = TRUE)
-    legend("topleft", legend = "# segments", pch = 19, lty = 1, col = "black", cex = 1, inset = c(-.1, -.2), bty = "n")
-    par(xpd = FALSE)
+    graphics::box()
+    graphics::par(xpd = TRUE)
+    graphics::legend("topleft", legend = "# segments", pch = 19, lty = 1, col = "black", cex = 1, inset = c(-.1, -.2), bty = "n")
+    graphics::par(xpd = FALSE)
   } else {
-    par(mar = c(1, 2, 2, 1))
-    barplot(height = nSeg, names.arg = as.character(gamma), beside = TRUE, space = 0.5, xlab = "", ylab = "", axes = FALSE, mgp = mgp.x, col = "lightgrey", main = "# segments", cex.main = cex.main)
-    abline(h = 0) # xline
+    graphics::par(mar = c(1, 2, 2, 1))
+    graphics::barplot(height = nSeg, names.arg = as.character(gamma), beside = TRUE, space = 0.5, xlab = "", ylab = "", axes = FALSE, mgp = mgp.x, col = "lightgrey", main = "# segments", cex.main = cex.main)
+    graphics::abline(h = 0) # xline
   }
   # add yaxis
   at <- pretty(x = c(0, nSeg), n = 3)
-  axis(side = 2, cex.axis = cex.axis, las = 1, mgp = mgp.y, tcl = tcl) # ,at=at)
-  mtext(text = "gamma", side = 1, line = 1.2, cex = cex.lab, outer = TRUE, at = c(0.85, 0.85))
+  graphics::axis(side = 2, cex.axis = cex.axis, las = 1, mgp = mgp.y, tcl = tcl) # ,at=at)
+  graphics::mtext(text = "gamma", side = 1, line = 1.2, cex = cex.lab, outer = TRUE, at = c(0.85, 0.85))
 
   if (cv) {
     # K-fold cross-validation:
@@ -253,22 +253,22 @@ plotGamma <- function(data, pos.unit = "bp", gammaRange = c(10, 100), dowins = T
     # Calculate average sse over the K runs:
     pred.error <- apply(sse, 1, mean)
     # Add residual error to last panel plot
-    par(new = TRUE)
+    graphics::par(new = TRUE)
     opt <- which.min(pred.error)
     res.pch <- rep(19, length(pred.error))
     res.pch[opt] <- NA
     plot(gamma, pred.error, axes = FALSE, ylab = "", xlab = "", type = "b", pch = res.pch, col = "blue")
-    points(gamma[opt], min(pred.error), pch = 42, col = "blue", cex = 3)
+    graphics::points(gamma[opt], min(pred.error), pch = 42, col = "blue", cex = 3)
     at <- pretty(x = pred.error, n = 3)
-    axis(4, las = 1, cex.axis = cex.axis, tcl = tcl, mgp = c(2.3, 0.5, 0), col.axis = "blue") # ,at=at)
-    # mtext(side=4,line=2.3,"cv residual error",cex=cex.lab,col="forestgreen")
-    par(xpd = TRUE)
-    legend("topright", legend = "cv pred.error", pch = 19, lty = 1, col = "blue", cex = 1, inset = c(-.07, -.2), bty = "n")
+    graphics::axis(4, las = 1, cex.axis = cex.axis, tcl = tcl, mgp = c(2.3, 0.5, 0), col.axis = "blue") # ,at=at)
+    # graphics::mtext(side=4,line=2.3,"cv residual error",cex=cex.lab,col="forestgreen")
+    graphics::par(xpd = TRUE)
+    graphics::legend("topright", legend = "cv pred.error", pch = 19, lty = 1, col = "blue", cex = 1, inset = c(-.07, -.2), bty = "n")
   }
 
   # x- and y-lab for entire device:
-  mtext(text = "Position (mbp)", side = 1, line = 1.2, cex = cex.lab, outer = TRUE, at = c(0.33, 0.33))
-  mtext(text = "Log R", side = 2, line = 1.5, cex = cex.lab, outer = TRUE)
+  graphics::mtext(text = "Position (mbp)", side = 1, line = 1.2, cex = cex.lab, outer = TRUE, at = c(0.33, 0.33))
+  graphics::mtext(text = "Log R", side = 2, line = 1.5, cex = cex.lab, outer = TRUE)
 
   if (cv) {
     return(list(gamma = gamma, pred.error = pred.error, optGamma = gamma[opt]))

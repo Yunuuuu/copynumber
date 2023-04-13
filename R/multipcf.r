@@ -157,7 +157,7 @@ multipcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, gamma = 40, n
     nSample <- length(sampleid)
 
     # Read just the two first columns to get chrom and pos
-    chrom.pos <- read.table(file = data, sep = "\t", header = TRUE, colClasses = c(rep(NA, 2), rep("NULL", nSample)), as.is = TRUE)
+    chrom.pos <- utils::read.table(file = data, sep = "\t", header = TRUE, colClasses = c(rep(NA, 2), rep("NULL", nSample)), as.is = TRUE)
     chrom <- chrom.pos[, 1]
     position <- chrom.pos[, 2]
   }
@@ -207,7 +207,7 @@ multipcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, gamma = 40, n
     } else {
       f.y <- file(Y, "r")
       ncol.Y <- length(scan(f.y, nlines = 1, what = "character", quiet = TRUE, sep = "\t"))
-      nrow.Y <- nrow(read.table(file = Y, sep = "\t", header = TRUE, colClasses = c(NA, rep("NULL", ncol.Y - 1)), as.is = TRUE))
+      nrow.Y <- nrow(utils::read.table(file = Y, sep = "\t", header = TRUE, colClasses = c(NA, rep("NULL", ncol.Y - 1)), as.is = TRUE))
     }
     if (nrow.Y != nProbe || ncol.Y != nSample + 2) {
       stop("Input Y does not represent the same number of probes and samples as found in input data", call. = FALSE)
@@ -252,7 +252,7 @@ multipcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, gamma = 40, n
         cc <- rep("NULL", nSample + 2)
         cc[j + 2] <- "numeric"
         # only read data for the j'th sample
-        sample.data <- read.table(file = data, sep = "\t", header = TRUE, colClasses = cc)[, 1]
+        sample.data <- utils::read.table(file = data, sep = "\t", header = TRUE, colClasses = cc)[, 1]
       }
       sd[j] <- getMad(sample.data[!is.na(sample.data)], k = 25) # Take out missing values before calculating mad
     }
@@ -273,7 +273,7 @@ multipcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, gamma = 40, n
     } else {
       # Read data for this arm from file; since f is a opened connection, the reading will start on the next line which has not already been read
       # two first columns skipped
-      arm.data <- read.table(f, nrows = nProbe.c, sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
+      arm.data <- utils::read.table(f, nrows = nProbe.c, sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
     }
 
     # Check that there are no missing values:
@@ -349,7 +349,7 @@ multipcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, gamma = 40, n
       if (!isfile.Y) {
         arm.Y <- Y[probe.c, -c(1:2), drop = FALSE]
       } else {
-        arm.Y <- read.table(f.y, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
+        arm.Y <- utils::read.table(f.y, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
       }
       # Make sure Y is numeric:
       if (any(!sapply(arm.Y, is.numeric))) {
@@ -382,9 +382,9 @@ multipcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, gamma = 40, n
       }
 
       # Write segments to file for this arm
-      write.table(segments.c, file = w2, col.names = if (c == 1) seg.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
+      utils::write.table(segments.c, file = w2, col.names = if (c == 1) seg.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
       # Write estimated multiPCF-values file for this arm:
-      write.table(data.frame(chrom[probe.c], pos.c, t(yhat), stringsAsFactors = FALSE), file = w1, col.names = if (c == 1) mpcf.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
+      utils::write.table(data.frame(chrom[probe.c], pos.c, t(yhat), stringsAsFactors = FALSE), file = w1, col.names = if (c == 1) mpcf.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
     }
 
     # Append results for this arm:
@@ -826,7 +826,7 @@ sawMarkM <- function(x, L, frac1, frac2) {
       sawValue[l + L - 1] <- sawValue[l + L - 1] + abs(diff)
     }
   }
-  limit <- quantile(sawValue, (1 - frac1))
+  limit <- stats::quantile(sawValue, (1 - frac1))
   for (l in 1:(nrProbes - 2 * L)) {
     if (sawValue[l + L - 1] > limit) {
       mark[l + L - 1] <- 1
@@ -838,7 +838,7 @@ sawMarkM <- function(x, L, frac1, frac2) {
       sawValue2[l + 2] <- sawValue2[l + 2] + abs(diff2)
     }
   }
-  limit2 <- quantile(sawValue2, (1 - frac2))
+  limit2 <- stats::quantile(sawValue2, (1 - frac2))
   for (l in (L - 1):(nrProbes - L - 2)) {
     if (sawValue2[l + 2] > limit2) {
       mark[l + 2] <- 1

@@ -93,7 +93,7 @@ getHeatParameters <- function(type, nc, nr, nSample, upper.lim, lower.lim, chrom
   }
 
   # Check for user modifications
-  op <- modifyList(op, list(...))
+  op <- utils::modifyList(op, list(...))
 
   # Set assembly to refer to stored data instead of character string:
   op$assembly <- get_assembly(op$assembly)

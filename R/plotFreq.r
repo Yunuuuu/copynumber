@@ -75,9 +75,9 @@
 #' \item{list("percentLines")}{either a logical value indicating if horizontal
 #' percentages lines should be plotted, or a numeric vector with percentages at
 #' which such lines should be plotted. Default is TRUE.} }
-#' @note This function applies \code{par(fig)}, and is therefore not compatible
+#' @note This function applies \code{graphics::par(fig)}, and is therefore not compatible
 #' with other setups for arranging multiple plots in one device such as
-#' \code{par(mfrow,mfcol)}.
+#' \code{graphics::par(mfrow,mfcol)}.
 #' @author Gro Nilsen
 #' @examples
 #'
@@ -175,8 +175,8 @@ genomeFreq <- function(data, thres.gain, thres.loss, pos.unit, layout, ...) {
   xright <- x$xright
 
 
-  if (dev.cur() <= 1) { # to make Sweave work
-    dev.new(width = op$plot.size[1], height = op$plot.size[2], record = TRUE)
+  if (grDevices::dev.cur() <= 1) { # to make Sweave work
+    grDevices::dev.new(width = op$plot.size[1], height = op$plot.size[2], record = TRUE)
   }
 
 
@@ -192,7 +192,7 @@ genomeFreq <- function(data, thres.gain, thres.loss, pos.unit, layout, ...) {
   for (t in 1:nT) {
     # Frame dimensions for plot t:
     fig.t <- c(frames$left[clm], frames$right[clm], frames$bot[row], frames$top[row])
-    par(fig = fig.t, new = new, oma = c(0, 0, 1, 0), mar = op$mar)
+    graphics::par(fig = fig.t, new = new, oma = c(0, 0, 1, 0), mar = op$mar)
 
     # Calculate the percentage of samples that have estimated copy number larger than thres at given position:
     freq.amp <- rowMeans(data[, -c(1:2), drop = FALSE] > thres.gain[t]) * 100
@@ -208,20 +208,20 @@ genomeFreq <- function(data, thres.gain, thres.loss, pos.unit, layout, ...) {
     chromPattern(pos.unit, op)
 
     # main title for this plot
-    title(main = op$main[t], line = op$main.line, cex.main = op$cex.main)
+    graphics::title(main = op$main[t], line = op$main.line, cex.main = op$cex.main)
 
     # Add axes, labels and percentage lines:
     addToFreqPlot(op, type = "genome")
 
     # Plot frequencies:
-    rect(xleft = xleft, ybottom = 0, xright = xright, ytop = freq.amp, col = op$col.gain, border = op$col.gain)
-    rect(xleft = xleft, ybottom = 0, xright = xright, ytop = -freq.del, col = op$col.loss, border = op$col.loss)
+    graphics::rect(xleft = xleft, ybottom = 0, xright = xright, ytop = freq.amp, col = op$col.gain, border = op$col.gain)
+    graphics::rect(xleft = xleft, ybottom = 0, xright = xright, ytop = -freq.del, col = op$col.loss, border = op$col.loss)
 
     # Add line at y=0:
-    abline(h = 0, lty = 1, col = "grey82", lwd = 1.5)
+    graphics::abline(h = 0, lty = 1, col = "grey82", lwd = 1.5)
 
     # Add line at y=0:
-    abline(h = 0, lty = 1, col = "grey82", lwd = 1.5)
+    graphics::abline(h = 0, lty = 1, col = "grey82", lwd = 1.5)
 
     # Separate chromosomes by vertical lines:
     op$chrom.lty <- 1
@@ -231,7 +231,7 @@ genomeFreq <- function(data, thres.gain, thres.loss, pos.unit, layout, ...) {
     # Get new page, or update column/row:
     if (t %% (nr * nc) == 0) {
       # Start new plot page (prompted by user)
-      devAskNewPage(ask = TRUE)
+      grDevices::devAskNewPage(ask = TRUE)
 
       # Reset columns and row in layout:
       clm <- 1
@@ -300,8 +300,8 @@ chromosomeFreq <- function(data, thres.gain, thres.loss, pos.unit, chrom, layout
 
   # make separate plots for each value of thres.gain/thres.loss
   for (t in 1:nT) {
-    if (dev.cur() <= 1) { # to make Sweave work
-      dev.new(width = op$plot.size[1], height = op$plot.size[2], record = TRUE)
+    if (grDevices::dev.cur() <= 1) { # to make Sweave work
+      grDevices::dev.new(width = op$plot.size[1], height = op$plot.size[2], record = TRUE)
     }
 
     # Initialize row and column index:
@@ -322,7 +322,7 @@ chromosomeFreq <- function(data, thres.gain, thres.loss, pos.unit, chrom, layout
     for (c in 1:nChrom) {
       # Frame dimensions for plot c:
       fig.c <- c(frames$left[clm], frames$right[clm], frames$bot[row], frames$top[row])
-      par(fig = fig.c, new = new, oma = oma, mar = mar)
+      graphics::par(fig = fig.c, new = new, oma = oma, mar = mar)
 
       # Make list with frame dimensions:
       frame.c <- list(left = frames$left[clm], right = frames$right[clm], bot = frames$bot[row], top = frames$top[row])
@@ -343,7 +343,7 @@ chromosomeFreq <- function(data, thres.gain, thres.loss, pos.unit, chrom, layout
         ideo.frame <- frame.c
         ideo.frame$top <- frame.c$bot + (frame.c$top - frame.c$bot) * op$ideo.frac
 
-        par(fig = unlist(ideo.frame), new = new, mar = op$mar.i)
+        graphics::par(fig = unlist(ideo.frame), new = new, mar = op$mar.i)
         # Plot ideogram and get maximum probe position in ideogram:
         plotIdeogram(chrom = k, cyto.text = op$cyto.text, cyto.data = op$assembly, cex = op$cex.cytotext, unit = op$plot.unit)
 
@@ -356,7 +356,7 @@ chromosomeFreq <- function(data, thres.gain, thres.loss, pos.unit, chrom, layout
 
       # Freq.plot-dimensions:
       frame.c$bot <- frame.c$bot + (frame.c$top - frame.c$bot) * op$ideo.frac
-      par(fig = unlist(frame.c), new = new, mar = op$mar)
+      graphics::par(fig = unlist(frame.c), new = new, mar = op$mar)
 
       # Limits:
       if (!is.null(op$xlim)) {
@@ -373,23 +373,23 @@ chromosomeFreq <- function(data, thres.gain, thres.loss, pos.unit, chrom, layout
       addToFreqPlot(chrom.op, type = "bychrom")
 
       # Plot frequencies as rectangles
-      rect(xleft = xleft[ind.c], ybottom = 0, xright = xright[ind.c], ytop = freqamp.c, col = op$col.gain, border = op$col.gain)
-      rect(xleft = xleft[ind.c], ybottom = 0, xright = xright[ind.c], ytop = -freqdel.c, col = op$col.loss, border = op$col.loss)
+      graphics::rect(xleft = xleft[ind.c], ybottom = 0, xright = xright[ind.c], ytop = freqamp.c, col = op$col.gain, border = op$col.gain)
+      graphics::rect(xleft = xleft[ind.c], ybottom = 0, xright = xright[ind.c], ytop = -freqdel.c, col = op$col.loss, border = op$col.loss)
 
 
       # Add line at y=0 and x=0
-      abline(h = 0, lty = 1, col = "grey90")
-      abline(v = 0)
+      graphics::abline(h = 0, lty = 1, col = "grey90")
+      graphics::abline(v = 0)
 
 
 
       # If page is full; start plotting on new page
       if (c %% (nr * nc) == 0 && c != nChrom) {
         # Add main title to page:
-        title(op$title[t], outer = TRUE)
+        graphics::title(op$title[t], outer = TRUE)
 
         # Start new page when prompted by user:
-        devAskNewPage(ask = TRUE)
+        grDevices::devAskNewPage(ask = TRUE)
 
         # Reset columns and row in layout:
         clm <- 1
@@ -408,9 +408,9 @@ chromosomeFreq <- function(data, thres.gain, thres.loss, pos.unit, chrom, layout
     } # endfor
 
     # Add main title to page:
-    title(op$title[t], outer = TRUE)
+    graphics::title(op$title[t], outer = TRUE)
     if (t != nT) {
-      devAskNewPage(ask = TRUE)
+      grDevices::devAskNewPage(ask = TRUE)
     }
   } # endfor
 } # endfunction

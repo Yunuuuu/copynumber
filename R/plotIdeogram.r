@@ -77,7 +77,7 @@ plotIdeogram <- function(chrom, cyto.text = FALSE, cex = 0.6, cyto.data, cyto.un
 
   # Rectangles:
   skip.rect <- c(1, centromere, n, stalk)
-  rect(xleft[-skip.rect], rep(ylow, n - length(skip.rect)), xright[-skip.rect], rep(yhigh, n - length(skip.rect)),
+  graphics::rect(xleft[-skip.rect], rep(ylow, n - length(skip.rect)), xright[-skip.rect], rep(yhigh, n - length(skip.rect)),
     col = col[-skip.rect], border = "black", density = density[-skip.rect], angle = angle[-skip.rect]
   )
 
@@ -100,7 +100,7 @@ plotIdeogram <- function(chrom, cyto.text = FALSE, cex = 0.6, cyto.data, cyto.un
     }
   }
   if (cyto.text) {
-    mtext(text = paste(chrom.cytoband[, 4], "-", sep = " "), side = 1, at = (xleft + (xright - xleft)/2), cex = cex, las = 2, adj = 1, xpd = NA) # ,line=-1)#,outer=TRUE)
+    graphics::mtext(text = paste(chrom.cytoband[, 4], "-", sep = " "), side = 1, at = (xleft + (xright - xleft)/2), cex = cex, las = 2, adj = 1, xpd = NA) # ,line=-1)#,outer=TRUE)
   }
 }
 
@@ -147,7 +147,7 @@ draw.roundEdge <- function(start, stop, y0, y1, col, bow, density = NA, angle = 
     }
   }
 
-  polygon(x = X, y = Y, col = col, border = "black", density = density, angle = angle, lwd = lwd)
+  graphics::polygon(x = X, y = Y, col = col, border = "black", density = density, angle = angle, lwd = lwd)
 }
 
 drawStalk <- function(start, stop, y0, y1, col) {
@@ -158,5 +158,5 @@ drawStalk <- function(start, stop, y0, y1, col) {
   y_1 <- c(y0, y0 + 0.25, y0 + 0.25, y0)
   y_2 <- c(y1, y1 - 0.25, y1 - 0.25, y1)
   y <- c(y_1, y_2)
-  polygon(x = x, y = y, col = col)
+  graphics::polygon(x = x, y = y, col = col)
 }

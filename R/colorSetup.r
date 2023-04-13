@@ -32,8 +32,8 @@ colorSetup <- function(upper.lim, lower.lim, op) {
   range <- upper.lim - lower.lim
   n.col1 <- ceiling(op$n.col * abs(lower.lim)/range)
   n.col2 <- ceiling(op$n.col * upper.lim/range)
-  col.down <- colorRampPalette(op$colors[1:2], space = "rgb")(n.col1)
-  col.up <- colorRampPalette(op$colors[2:3], space = "rgb")(n.col2)
+  col.down <- grDevices::colorRampPalette(op$colors[1:2], space = "rgb")(n.col1)
+  col.up <- grDevices::colorRampPalette(op$colors[2:3], space = "rgb")(n.col2)
   colors <- c(col.down, col.up)
 
   # Divide into sequence according to values of limits:

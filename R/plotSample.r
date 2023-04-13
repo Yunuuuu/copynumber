@@ -129,24 +129,24 @@
 #'      drawn.}
 #'      \item{\code{main.line}:}{the margin line for the main title.}
 #'      \item{\code{h.col}:}{colour of the reference line. Default is
-#'      "darkgrey"} 
+#'      "darkgrey"}
 #'      \item{\code{h.lty}:}{line type used for the reference line.  Default is
-#'      5 (longdash)} 
+#'      5 (longdash)}
 #'      \item{\code{h.lwd}:}{line width for the reference line}
 #'      \item{\code{legend}:}{either a logical value indicating whether legends
 #'      should be added to the plot if there is more than one segmentation
 #'      result present in \code{segments}, or a character vector giving the
 #'      legend texts to be used for the segmentation results. Default is TRUE,
 #'      in which case the legend will be plotted in the topright corner of each
-#'      plot.} 
+#'      plot.}
 #'      \item{\code{seg.col}:}{color(s) used to plot the segmentation result(s).
-#'      The default colors are found using the function \code{rainbow(n)}, where
+#'      The default colors are found using the function \code{grDevices::rainbow(n)}, where
 #'      \code{n} is the number of segmentation results found in \code{segments}
 #'      (see \code{\link{rainbow}} for details).}
 #'      \item{\code{seg.lty}:}{the line type(s) used to plot the segmentation
-#'      result(s). Default is 1.} 
+#'      result(s). Default is 1.}
 #'      \item{\code{seg.lwd}:}{the line width(s) used
-#'      to plot the segmentation result(s).} 
+#'      to plot the segmentation result(s).}
 #'      \item{\code{connect}:}{logical value indicating whether segments should
 #'      be connected by vertical lines, default is TRUE.}
 #'      \item{\code{ideo.frac}:}{a numerical value in the range 0 to 1
@@ -161,9 +161,9 @@
 #'      \item{\code{cex.chrom}:}{the text size used to plot chromosome numbers
 #'      in \code{plotGenome}.}
 #' }
-#' @note These functions apply \code{par(fig)}, and are therefore not
+#' @note These functions apply \code{graphics::par(fig)}, and are therefore not
 #' compatible with other setups for arranging multiple plots in one device such
-#' as \code{par(mfrow,mfcol)}.
+#' as \code{graphics::par(mfrow,mfcol)}.
 #' @author Gro Nilsen
 #' @seealso \code{\link{plotChrom}}, \code{\link{plotGenome}}
 #' @examples
@@ -259,16 +259,16 @@ plotSample <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
     if (!arg$onefile || i == 1) {
       # Either print to file, or plot on screen
       if (!is.null(arg$dir.print)) {
-        pdf(file = paste(arg$dir.print, "/", file.name[i], ".pdf", sep = ""), width = arg$plot.size[1], height = arg$plot.size[2], onefile = TRUE, paper = "a4") # a4-paper
+        grDevices::pdf(file = paste(arg$dir.print, "/", file.name[i], ".pdf", sep = ""), width = arg$plot.size[1], height = arg$plot.size[2], onefile = TRUE, paper = "a4") # a4-paper
       } else {
-        if (dev.cur() <= i) { # to make Sweave work
-          dev.new(width = arg$plot.size[1], height = arg$plot.size[2], record = TRUE)
+        if (grDevices::dev.cur() <= i) { # to make Sweave work
+          grDevices::dev.new(width = arg$plot.size[1], height = arg$plot.size[2], record = TRUE)
         }
       }
     } else {
       # Start new page when prompted by user:
       if (is.null(arg$dir.print)) {
-        devAskNewPage(ask = TRUE)
+        grDevices::devAskNewPage(ask = TRUE)
       }
     }
 
@@ -285,7 +285,7 @@ plotSample <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
     # Get data limits for this sample if range should include all chromosomes (equalRange=TRUE)
     if (!is.null(data) && arg$equalRange) {
       all.chrom <- which(data[, 1] %in% chrom)
-      data.lim <- quantile(data[all.chrom, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
+      data.lim <- stats::quantile(data[all.chrom, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
     }
     # Picking out all segments where sampleid (in first column) is id, returns new list
     if (!is.null(segments)) {
@@ -300,7 +300,7 @@ plotSample <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
     for (c in 1:nChrom) {
       # Frame dimensions for plot c:
       fig.c <- c(frames$left[clm], frames$right[clm], frames$bot[row], frames$top[row])
-      par(fig = fig.c, new = new, oma = oma, mar = mar)
+      graphics::par(fig = fig.c, new = new, oma = oma, mar = mar)
       frame.c <- list(left = frames$left[clm], right = frames$right[clm], bot = frames$bot[row], top = frames$top[row])
 
       # Divide frame for this chromosome into a frame for the actual plot and a frame for the ideogram:
@@ -324,7 +324,7 @@ plotSample <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
       if (plot.ideo) {
         xmax <- chromMax(chrom = k, cyto.data = arg$assembly, pos.unit = arg$plot.unit)
         # PLOT IDEOGRAM
-        par(fig = unlist(ideo.frame), new = new, mar = arg$mar.i)
+        graphics::par(fig = unlist(ideo.frame), new = new, mar = arg$mar.i)
         plotIdeogram(chrom = k, arg$cyto.text, cyto.data = arg$assembly, cex = arg$cex.cytotext, unit = arg$plot.unit)
         new <- TRUE
       } else {
@@ -337,7 +337,7 @@ plotSample <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
         ind.chrom <- which(data[, 1] == k)
         if (!arg$equalRange) {
           # Get data limits for this sample using just this chromosome (equalRange=FALSE)
-          data.lim <- quantile(data[ind.chrom, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
+          data.lim <- stats::quantile(data[ind.chrom, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
         }
 
         plotObs(
@@ -366,7 +366,7 @@ plotSample <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
 
         # Add segmentation legends:
         if (!is.null(arg$legend)) {
-          legend("topright", legend = arg$legend, col = arg$seg.col, lty = arg$seg.lty, cex = arg$cex.axis)
+          graphics::legend("topright", legend = arg$legend, col = arg$seg.col, lty = arg$seg.lty, cex = arg$cex.axis)
         }
       }
 
@@ -375,11 +375,11 @@ plotSample <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
       # If page is full; plot on new page
       if (c %% (nr * nc) == 0) {
         # Add main title to page:
-        title(arg$title[i], outer = TRUE)
+        graphics::title(arg$title[i], outer = TRUE)
 
         # Start new page when prompted by user:
         if (is.null(arg$dir.print)) {
-          devAskNewPage(ask = TRUE)
+          grDevices::devAskNewPage(ask = TRUE)
         }
 
         # Reset columns and row in layout:
@@ -400,17 +400,17 @@ plotSample <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
 
     # Plot sampleid as title
 
-    title(arg$title[i], outer = TRUE)
+    graphics::title(arg$title[i], outer = TRUE)
 
     # Close graphcis:
     if (!is.null(arg$dir.print)) {
       if (!arg$onefile) {
         cat("Plot was saved in ", paste(arg$dir.print, "/", file.name[i], ".pdf", sep = ""), "\n")
-        graphics.off()
+        grDevices::graphics.off()
       } else {
         if (i == nSample) {
           cat("Plot was saved in ", paste(arg$dir.print, "/", file.name, ".pdf", sep = ""), "\n")
-          graphics.off()
+          grDevices::graphics.off()
         }
       }
     } # endif

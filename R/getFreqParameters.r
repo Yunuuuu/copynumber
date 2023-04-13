@@ -84,7 +84,7 @@ getFreqPlotParameters <- function(type, nc, nr, thres.gain, thres.loss, chrom = 
   }
 
   # Check for user modifications
-  op <- modifyList(op, list(...))
+  op <- utils::modifyList(op, list(...))
 
   # Set/modify parameters more depending on user input:
 

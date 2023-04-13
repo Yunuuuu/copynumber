@@ -39,7 +39,7 @@ c("red","limegreen").}
 \item{alpha}{a scalar in the range 0 to 1 determining the amount of scaling
 of the aberration frequencies. For the default value of 1/7 the distance
 between the genome circle and the zero-line of the frequency-circle
-corresponds to an aberration percentage of 100 \\%. See details.}
+corresponds to an aberration percentage of 100 \%\%. See details.}
 
 \item{arcs}{an optional matrix or data frame with 5 columns specifying
 connections between genomic loci. The first two columns must give the

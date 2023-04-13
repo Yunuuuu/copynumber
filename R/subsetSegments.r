@@ -67,7 +67,7 @@ subsetSegments <- function(segments, chrom = NULL, sample = NULL, sep = "\t", ..
   # get header and chrom from data
   if (isfile) {
     # read segment-file
-    segments <- read.table(segments, header = TRUE, sep = sep, as.is = TRUE)
+    segments <- utils::read.table(segments, header = TRUE, sep = sep, as.is = TRUE)
   } else {
     # Make sure segments is a data frame
     segments <- pullOutContent(res = segments, what = "segments")

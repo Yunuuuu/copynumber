@@ -69,9 +69,9 @@ number values are above or below the values given in \code{thres.gain} and
 \code{thres.loss}, respectively.
 }
 \note{
-This function applies \code{par(fig)}, and is therefore not compatible
+This function applies \code{graphics::par(fig)}, and is therefore not compatible
 with other setups for arranging multiple plots in one device such as
-\code{par(mfrow,mfcol)}.
+\code{graphics::par(mfrow,mfcol)}.
 }
 \examples{
 

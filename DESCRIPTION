@@ -1,6 +1,6 @@
 Package: copynumber
 Title: Segmentation of single- and multi-track copy number data by
-        penalized least squares regression.
+        penalized least squares regression
 Version: 1.39.0
 Author: Gro Nilsen, Knut Liestoel and Ole Christian Lingjaerde.
 Maintainer: Gro Nilsen <gronilse@ifi.uio.no>
@@ -15,11 +15,14 @@ License: Artistic-2.0
 LazyData: yes
 Date: 2013-04-16
 BuildResaveData: best
-Depends: R (>= 2.10), BiocGenerics
+Depends: R (>= 3.5.0), BiocGenerics
 Imports: S4Vectors, IRanges, GenomicRanges
+Suggests: 
+    knitr,
+    rmarkdown,
+    roxygen2
 biocViews: aCGH, SNP, CopyNumberVariation, Genetics, Visualization
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Suggests: 
-    roxygen2
+VignetteBuilder: knitr

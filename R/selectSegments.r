@@ -214,10 +214,10 @@ subset.abe <- function(segments, nseg, thres, p, large) {
     return(list(sel.seg = sel.seg, seg.ab.prop = prop.ab))
   } else {
     if (large) {
-      q <- apply(segments[, -c(1:5)], 1, quantile, probs = 1 - p, type = 1)
+      q <- apply(segments[, -c(1:5)], 1, stats::quantile, probs = 1 - p, type = 1)
       q.ord <- order(q, decreasing = TRUE)
     } else {
-      q <- apply(segments[, -c(1:5)], 1, quantile, probs = p, type = 1)
+      q <- apply(segments[, -c(1:5)], 1, stats::quantile, probs = p, type = 1)
       q.ord <- order(q, decreasing = FALSE)
     }
     sel.seg <- segments[q.ord[1:nseg], ]

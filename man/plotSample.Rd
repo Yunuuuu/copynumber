@@ -122,7 +122,7 @@ legend texts to be used for the segmentation results. Default is TRUE,
 in which case the legend will be plotted in the topright corner of each
 plot.}
 \item{\code{seg.col}:}{color(s) used to plot the segmentation result(s).
-The default colors are found using the function \code{rainbow(n)}, where
+The default colors are found using the function \code{grDevices::rainbow(n)}, where
 \code{n} is the number of segmentation results found in \code{segments}
 (see \code{\link{rainbow}} for details).}
 \item{\code{seg.lty}:}{the line type(s) used to plot the segmentation
@@ -154,9 +154,9 @@ option. If the number of plots exceeds the desired page layout, the user is
 prompted before advancing to the next page of output.
 }
 \note{
-These functions apply \code{par(fig)}, and are therefore not
+These functions apply \code{graphics::par(fig)}, and are therefore not
 compatible with other setups for arranging multiple plots in one device such
-as \code{par(mfrow,mfcol)}.
+as \code{graphics::par(mfrow,mfcol)}.
 }
 \examples{
 

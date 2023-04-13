@@ -33,7 +33,7 @@ getMad <- function(x, k = 25) {
   runMedian <- medianFilter(x, k)
 
   dif <- x - runMedian
-  SD <- mad(dif)
+  SD <- stats::mad(dif)
 
   return(SD)
 }

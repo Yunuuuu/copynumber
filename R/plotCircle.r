@@ -65,7 +65,7 @@
 #' @param alpha a scalar in the range 0 to 1 determining the amount of scaling
 #' of the aberration frequencies. For the default value of 1/7 the distance
 #' between the genome circle and the zero-line of the frequency-circle
-#' corresponds to an aberration percentage of 100 \%. See details.
+#' corresponds to an aberration percentage of 100 %%. See details.
 #' @param arcs an optional matrix or data frame with 5 columns specifying
 #' connections between genomic loci. The first two columns must give the
 #' chromosome numbers and local positions for the start points of the arcs,
@@ -139,7 +139,7 @@ plotCircle <- function(segments, thres.gain, thres.loss = -thres.gain, pos.unit 
   delta <- 20000000 # defines the amount of space to be plotted between each chromosome
 
   # Empty plot
-  par(mar = c(0, 0, 0, 0))
+  graphics::par(mar = c(0, 0, 0, 0))
   plot(0, 0, xlim = c(-1.2, 1.2), ylim = c(-1.2, 1.2), axes = F, xlab = "", ylab = "", asp = 1, type = "n")
 
   outer.circ <- 0 # location of outer circle
@@ -199,7 +199,7 @@ plotCircle <- function(segments, thres.gain, thres.loss = -thres.gain, pos.unit 
     }
   }
   # Plot cytobands:
-  segments(tmp0$x[-delta.gridpts], tmp0$y[-delta.gridpts], tmp1$x[-delta.gridpts], tmp1$y[-delta.gridpts], col = c0[-delta.gridpts], lwd = 2)
+  graphics::segments(tmp0$x[-delta.gridpts], tmp0$y[-delta.gridpts], tmp1$x[-delta.gridpts], tmp1$y[-delta.gridpts], col = c0[-delta.gridpts], lwd = 2)
 
   # Plot outer circle
   x <- seq(0, 1, len = 2000)
@@ -212,7 +212,7 @@ plotCircle <- function(segments, thres.gain, thres.loss = -thres.gain, pos.unit 
   c.lines(x, y, xmax = 1)
 
   # Plot the white area between each chromosome:
-  segments(tmp0$x[delta.gridpts], tmp0$y[delta.gridpts], tmp1$x[delta.gridpts], tmp1$y[delta.gridpts], col = c0[delta.gridpts], lwd = 2)
+  graphics::segments(tmp0$x[delta.gridpts], tmp0$y[delta.gridpts], tmp1$x[delta.gridpts], tmp1$y[delta.gridpts], col = c0[delta.gridpts], lwd = 2)
 
   # Plot chromosome borders
   borders <- c(chr.stop.pos, chr.stop.pos - delta)
@@ -222,7 +222,7 @@ plotCircle <- function(segments, thres.gain, thres.loss = -thres.gain, pos.unit 
   y1 <- rep(inner.circ, length(borders))
   tmp0 <- circ(x0, y0, xmax)
   tmp1 <- circ(x1, y1, xmax)
-  segments(tmp0$x, tmp0$y, tmp1$x, tmp1$y, lwd = 3)
+  graphics::segments(tmp0$x, tmp0$y, tmp1$x, tmp1$y, lwd = 3)
 
 
   # Plot chromosome numbers
@@ -231,7 +231,7 @@ plotCircle <- function(segments, thres.gain, thres.loss = -thres.gain, pos.unit 
   x0 <- chrmiddle
   y0 <- rep(outer.circ - 0.1, length(chrmiddle))
   tmp <- circ(x0, y0, xmax)
-  text(tmp$x, tmp$y, c(1:22, "X", "Y"))
+  graphics::text(tmp$x, tmp$y, c(1:22, "X", "Y"))
 
   # Plot frequency of aberration
   # Check data input:
@@ -261,7 +261,7 @@ plotCircle <- function(segments, thres.gain, thres.loss = -thres.gain, pos.unit 
   y1[y1 > m] <- m # make sure that frequencies don't exceed the maximum space; truncate large values to this max
   tmp0 <- circ(x0, y0, xmax)
   tmp1 <- circ(x1, y1, xmax)
-  segments(tmp0$x, tmp0$y, tmp1$x, tmp1$y, col = freq.colors[1], lwd = 2)
+  graphics::segments(tmp0$x, tmp0$y, tmp1$x, tmp1$y, col = freq.colors[1], lwd = 2)
 
 
   m <- freq.circ - (freq.circ - inner.circ) # max space for del frequencies
@@ -273,7 +273,7 @@ plotCircle <- function(segments, thres.gain, thres.loss = -thres.gain, pos.unit 
   y1[y1 < m] <- m # make sure that frequencies don't exceed the maximum space; truncate large values to this max
   tmp0 <- circ(x0, y0, xmax)
   tmp1 <- circ(x1, y1, xmax)
-  segments(tmp0$x, tmp0$y, tmp1$x, tmp1$y, col = freq.colors[2], lwd = 2)
+  graphics::segments(tmp0$x, tmp0$y, tmp1$x, tmp1$y, col = freq.colors[2], lwd = 2)
 
   # Plot x-axis (x-circle)
   x <- seq(0, 1, len = 2000)
@@ -300,8 +300,8 @@ plotCircle <- function(segments, thres.gain, thres.loss = -thres.gain, pos.unit 
     for (i in 1:length(x0)) {
       tmp <- circ(c(x0[i], 0, x1[i]), c(0.1, 1.0, 0.1), xmax)
       tmp <- circ(c(x0[i], 0, x1[i]), c(m, 1.0, m), xmax)
-      a0 <- xspline(tmp$x, tmp$y, shape = c(0, 1, 0), draw = F)
-      lines(a0$x, a0$y, col = arc.colors[which(u.cl == cl[i])])
+      a0 <- graphics::xspline(tmp$x, tmp$y, shape = c(0, 1, 0), draw = F)
+      graphics::lines(a0$x, a0$y, col = arc.colors[which(u.cl == cl[i])])
     }
   } # endif
 }
@@ -318,5 +318,5 @@ circ <- function(x, y, xmax) {
 
 c.lines <- function(x, y, xmax, ...) {
   tmp <- circ(x, y, xmax)
-  lines(tmp$x, tmp$y, ...)
+  graphics::lines(tmp$x, tmp$y, ...)
 }

@@ -80,8 +80,8 @@ prompted before advancing to the next page of output.
 \note{
 \%In \code{plotChrom}, only chromosomes found in both \code{data} and
 all segmentation results in \code{segments} will be plotted. This function
-applies \code{par(fig)}, and is therefore not compatible with other setups
-for arranging multiple plots in one device such as \code{par(mfrow,mfcol)}.
+applies \code{graphics::par(fig)}, and is therefore not compatible with other setups
+for arranging multiple plots in one device such as \code{graphics::par(mfrow,mfcol)}.
 }
 \examples{
 

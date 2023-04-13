@@ -92,9 +92,9 @@ suitability of the so-called optimal gamma from this procedure should be
 critically assessed.
 }
 \note{
-This function applies \code{par(fig)}, and is therefore not compatible
+This function applies \code{graphics::par(fig)}, and is therefore not compatible
 with other setups for arranging multiple plots in one device such as
-\code{par(mfrow,mfcol)}.
+\code{graphics::par(mfrow,mfcol)}.
 }
 \examples{
 

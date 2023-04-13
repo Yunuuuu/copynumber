@@ -77,9 +77,9 @@
 #' \code{las}, \code{tcl}, \code{mar} and \code{mgp} (see \code{\link{par}} on
 #' these). In addition, a range of graphical arguments specific for copy number
 #' plots may be specified, see \code{\link{plotSample}} on these.
-#' @note This function applies \code{par(fig)}, and is therefore not compatible
+#' @note This function applies \code{graphics::par(fig)}, and is therefore not compatible
 #' with other setups for arranging multiple plots in one device such as
-#' \code{par(mfrow,mfcol)}.
+#' \code{graphics::par(mfrow,mfcol)}.
 #' @author Gro Nilsen
 #' @seealso \code{\link{plotSample}}, \code{\link{plotChrom}}
 #' @examples
@@ -124,8 +124,8 @@
 #' # example segments which are above 0.2 or below -0.2 are considered aberrated
 #' # regions:
 #' plotGenome(segments = uni.segments, sample = 5, connect = FALSE)
-#' abline(h = 0.2, col = "blue", lty = 5)
-#' abline(h = -0.2, col = "blue", lty = 5)
+#' graphics::abline(h = 0.2, col = "blue", lty = 5)
+#' graphics::abline(h = -0.2, col = "blue", lty = 5)
 #'
 #' @export
 plotGenome <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = NULL, assembly = "hg19", winsoutliers = NULL, xaxis = "pos", layout = c(1, 1), ...) {
@@ -165,7 +165,7 @@ plotGenome <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
   # Get data limits if equalRange -> range will be max and min across all samples
   if (!is.null(data) && arg$equalRange) {
     all.sample <- which(sample.names %in% sampleID)
-    data.lim <- quantile(data[, all.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
+    data.lim <- stats::quantile(data[, all.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
   }
 
   # Check if there should be more than one file/window with plot(s), and get file.name accordingly
@@ -178,11 +178,11 @@ plotGenome <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
   for (j in 1:length(file.name)) {
     # Either print to file, or plot on screen
     if (!is.null(arg$dir.print)) {
-      pdf(file = paste(arg$dir.print, "/", file.name[j], ".pdf", sep = ""), width = arg$plot.size[1], height = arg$plot.size[2], onefile = TRUE, paper = "a4") # a4-paper
+      grDevices::pdf(file = paste(arg$dir.print, "/", file.name[j], ".pdf", sep = ""), width = arg$plot.size[1], height = arg$plot.size[2], onefile = TRUE, paper = "a4") # a4-paper
     } else {
       # windows(width=arg$plot.size[1],height=arg$plot.size[2],record=TRUE)
-      if (dev.cur() <= j) { # to make Sweave work
-        dev.new(width = arg$plot.size[1], height = arg$plot.size[2], record = TRUE)
+      if (grDevices::dev.cur() <= j) { # to make Sweave work
+        grDevices::dev.new(width = arg$plot.size[1], height = arg$plot.size[2], record = TRUE)
       }
     }
 
@@ -209,7 +209,7 @@ plotGenome <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
     for (i in 1:length(use.sampleID)) {
       # Frame dimensions for plot i:
       fig.c <- c(frames$left[clm], frames$right[clm], frames$bot[row], frames$top[row])
-      par(fig = fig.c, new = new, oma = c(0, 0, 0.5, 0), mar = arg$mar)
+      graphics::par(fig = fig.c, new = new, oma = c(0, 0, 0.5, 0), mar = arg$mar)
       frame.c <- list(left = frames$left[clm], right = frames$right[clm], bot = frames$bot[row], top = frames$top[row])
 
       # Which sample is this:
@@ -230,7 +230,7 @@ plotGenome <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
       if (!is.null(data)) {
         if (!arg$equalRange) {
           # Get data limits for just this sample
-          data.lim <- quantile(data[, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
+          data.lim <- stats::quantile(data[, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
         }
 
         plotObs(
@@ -261,17 +261,17 @@ plotGenome <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
 
         # Add segmentation legends:
         if (!is.null(arg$legend)) {
-          legend("topright", legend = arg$legend, col = arg$seg.col, lty = arg$seg.lty, cex = arg$cex.axis)
+          graphics::legend("topright", legend = arg$legend, col = arg$seg.col, lty = arg$seg.lty, cex = arg$cex.axis)
         }
       }
 
       if (i %% (nr * nc) == 0) {
         # Add main title to window page:
-        title(arg$title, outer = TRUE)
+        graphics::title(arg$title, outer = TRUE)
 
         # Start new plot page (prompted by user)
         if (is.null(arg$dir.print)) {
-          devAskNewPage(ask = TRUE)
+          grDevices::devAskNewPage(ask = TRUE)
         }
 
         # Reset columns and row in layout:
@@ -291,12 +291,12 @@ plotGenome <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = N
     } # endfor
 
     # Add main title to page:
-    title(arg$title, outer = TRUE)
+    graphics::title(arg$title, outer = TRUE)
 
     # Close graphics
     if (!is.null(arg$dir.print)) {
       cat("Plot was saved in ", paste(arg$dir.print, "/", file.name[j], ".pdf", sep = ""), "\n")
-      graphics.off()
+      grDevices::graphics.off()
     }
 
     # Update current number of plots:

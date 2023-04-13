@@ -155,7 +155,7 @@ pcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, kmin = 5, gamma = 
     nSample <- length(sampleid)
 
     # Read just the two first columns to get chrom and pos
-    chrom.pos <- read.table(file = data, sep = "\t", header = TRUE, colClasses = c(rep(NA, 2), rep("NULL", nSample)), as.is = TRUE) # chromosomes could be character or numeric
+    chrom.pos <- utils::read.table(file = data, sep = "\t", header = TRUE, colClasses = c(rep(NA, 2), rep("NULL", nSample)), as.is = TRUE) # chromosomes could be character or numeric
     chrom <- chrom.pos[, 1]
     position <- chrom.pos[, 2]
   }
@@ -197,7 +197,7 @@ pcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, kmin = 5, gamma = 
     } else {
       f.y <- file(Y, "r")
       ncol.Y <- length(scan(f.y, nlines = 1, what = "character", quiet = TRUE, sep = "\t"))
-      nrow.Y <- nrow(read.table(file = Y, sep = "\t", header = TRUE, colClasses = c(NA, rep("NULL", ncol.Y - 1)), as.is = TRUE))
+      nrow.Y <- nrow(utils::read.table(file = Y, sep = "\t", header = TRUE, colClasses = c(NA, rep("NULL", ncol.Y - 1)), as.is = TRUE))
     }
     if (nrow.Y != nProbe || ncol.Y != nSample + 2) {
       stop("Input Y does not represent the same number of probes and samples as found in input data", call. = FALSE)
@@ -219,7 +219,7 @@ pcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, kmin = 5, gamma = 
         cc <- rep("NULL", nSample + 2)
         cc[j + 2] <- "numeric"
         # only read data for the j'th sample
-        sample.data <- read.table(file = data, sep = "\t", header = TRUE, colClasses = cc)[, 1]
+        sample.data <- utils::read.table(file = data, sep = "\t", header = TRUE, colClasses = cc)[, 1]
       }
       sd[j] <- getMad(sample.data[!is.na(sample.data)], k = 25) # Take out missing values before calculating mad
     }
@@ -273,7 +273,7 @@ pcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, kmin = 5, gamma = 
     } else {
       # Read data for this arm from file; since f is a opened connection, the reading will start on the next line which has not already been read
       # two first columns are skipped
-      arm.data <- read.table(f, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
+      arm.data <- utils::read.table(f, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
     }
 
     # Make sure data is numeric:
@@ -285,7 +285,7 @@ pcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, kmin = 5, gamma = 
       if (!isfile.Y) {
         arm.Y <- Y[probe.c, -c(1:2), drop = FALSE]
       } else {
-        arm.Y <- read.table(f.y, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
+        arm.Y <- utils::read.table(f.y, nrows = length(probe.c), sep = "\t", colClasses = c(rep("NULL", 2), rep("numeric", nSample)))
       }
       # Make sure Y is numeric:
       if (any(!sapply(arm.Y, is.numeric))) {
@@ -416,10 +416,10 @@ pcf <- function(data, pos.unit = "bp", arms = NULL, Y = NULL, kmin = 5, gamma = 
         w2 <- file(file.names[2], "w")
       }
       # Write estimated PCF-values file for this arm:
-      write.table(data.frame(chrom[probe.c], pos.c, pcf.est.c, stringsAsFactors = FALSE), file = w1, col.names = if (c == 1) pcf.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
+      utils::write.table(data.frame(chrom[probe.c], pos.c, pcf.est.c, stringsAsFactors = FALSE), file = w1, col.names = if (c == 1) pcf.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
 
       # Write segments to file for this arm
-      write.table(segments.c, file = w2, col.names = if (c == 1) seg.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
+      utils::write.table(segments.c, file = w2, col.names = if (c == 1) seg.names else FALSE, row.names = FALSE, quote = FALSE, sep = "\t")
     }
 
 
@@ -827,7 +827,7 @@ filterMarkS4 <- function(x, kmin, L, L2, frac1, frac2, frac3, thres) {
   test <- c(rep(0, 3), test, rep(0, 3))
   cost1B <- cost1[cost1 >= thres * test]
   frac1B <- min(0.8, frac1 * length(cost1)/length(cost1B))
-  limit <- quantile(cost1B, (1 - frac1B), names = FALSE)
+  limit <- stats::quantile(cost1B, (1 - frac1B), names = FALSE)
   mark <- (cost1 > limit) & (cost1 > 0.9 * test)
 
 
@@ -837,7 +837,7 @@ filterMarkS4 <- function(x, kmin, L, L2, frac1, frac2, frac3, thres) {
   ind24 <- ind21 + 5 * L2
   ind25 <- ind21 + 6 * L2
   cost2 <- abs(4 * xc[ind23] - xc[ind21] - xc[ind22] - xc[ind24] - xc[ind25])
-  limit2 <- quantile(cost2, (1 - frac2), names = FALSE)
+  limit2 <- stats::quantile(cost2, (1 - frac2), names = FALSE)
   mark2 <- (cost2 > limit2)
   mark2 <- c(rep(0, 3 * L2 - 1), mark2, rep(0, 3 * L2))
   if (3 * L > kmin) {
@@ -865,7 +865,7 @@ filterMarkS4 <- function(x, kmin, L, L2, frac1, frac2, frac3, thres) {
     test <- c(rep(0, 3), test, rep(0, 3))
     cost1C <- shortAb[shortAb >= thres * test]
     frac1C <- min(0.8, frac3 * length(shortAb)/length(cost1C))
-    limit3 <- quantile(cost1C, (1 - frac1C), names = FALSE)
+    limit3 <- stats::quantile(cost1C, (1 - frac1C), names = FALSE)
     markH1 <- (shortAb > limit3) & (shortAb > thres * test)
     markH2 <- c(rep(FALSE, (kmin - 1)), markH1, rep(FALSE, 2 * kmin))
     markH3 <- c(rep(FALSE, (2 * kmin - 1)), markH1, rep(FALSE, kmin))

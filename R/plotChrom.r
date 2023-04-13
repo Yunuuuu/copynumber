@@ -87,8 +87,8 @@
 #' plots may be specified, see \code{\link{plotSample}} on these.
 #' @note %In \code{plotChrom}, only chromosomes found in both \code{data} and
 #' all segmentation results in \code{segments} will be plotted. This function
-#' applies \code{par(fig)}, and is therefore not compatible with other setups
-#' for arranging multiple plots in one device such as \code{par(mfrow,mfcol)}.
+#' applies \code{graphics::par(fig)}, and is therefore not compatible with other setups
+#' for arranging multiple plots in one device such as \code{graphics::par(mfrow,mfcol)}.
 #' @author Gro Nilsen
 #' @seealso \code{\link{plotSample}}, \code{\link{plotGenome}}
 #' @examples
@@ -174,16 +174,16 @@ plotChrom <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = NU
     if (!arg$onefile || c == 1) {
       # Either print to file, or plot on screen
       if (!is.null(arg$dir.print)) {
-        pdf(file = paste(arg$dir.print, "/", file.name[c], ".pdf", sep = ""), width = arg$plot.size[1], height = arg$plot.size[2], onefile = TRUE, paper = "a4") # a4-paper
+        grDevices::pdf(file = paste(arg$dir.print, "/", file.name[c], ".pdf", sep = ""), width = arg$plot.size[1], height = arg$plot.size[2], onefile = TRUE, paper = "a4") # a4-paper
       } else {
-        if (dev.cur() <= c) { # to make Sweave work
-          dev.new(width = arg$plot.size[1], height = arg$plot.size[2], record = TRUE)
+        if (grDevices::dev.cur() <= c) { # to make Sweave work
+          grDevices::dev.new(width = arg$plot.size[1], height = arg$plot.size[2], record = TRUE)
         }
       }
     } else {
       # Start new page when prompted by user:
       if (is.null(arg$dir.print)) {
-        devAskNewPage(ask = TRUE)
+        grDevices::devAskNewPage(ask = TRUE)
       }
     }
     # Initialize
@@ -207,7 +207,7 @@ plotChrom <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = NU
     # Get data ylimits for this chromosome using all sampleID (equalrange=TRUE)
     if (!is.null(data) && arg$equalRange) {
       all.sample <- which(sample.names %in% sampleID)
-      data.lim <- quantile(data[ind.chrom, all.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
+      data.lim <- stats::quantile(data[ind.chrom, all.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
     }
     # Picking out all segments where chromosome number (in second column) is k, returns new list
     if (!is.null(segments)) {
@@ -227,7 +227,7 @@ plotChrom <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = NU
 
       # Frame dimensions for this plot:
       fig.c <- c(frames$left[clm], frames$right[clm], frames$bot[row], frames$top[row])
-      par(fig = fig.c, new = new, oma = oma, mar = mar)
+      graphics::par(fig = fig.c, new = new, oma = oma, mar = mar)
       frame.c <- list(left = frames$left[clm], right = frames$right[clm], bot = frames$bot[row], top = frames$top[row])
 
       # Divide frame for this sample into a frame for the actual plot and a frame for the ideogram:
@@ -248,7 +248,7 @@ plotChrom <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = NU
 
       # PLOT IDEOGRAM
       if (plot.ideo) {
-        par(fig = unlist(ideo.frame), new = new, mar = arg$mar.i)
+        graphics::par(fig = unlist(ideo.frame), new = new, mar = arg$mar.i)
         plotIdeogram(chrom = k, arg$cyto.text, cyto.data = arg$assembly, cex = arg$cex.cytotext, unit = arg$plot.unit)
         new <- TRUE
       }
@@ -259,7 +259,7 @@ plotChrom <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = NU
         ind.sample <- which(sample.names == id)
         if (!arg$equalRange) {
           # Get data limits this chromosome using only this sample (if equalRange=FALSE)
-          data.lim <- quantile(data[ind.chrom, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
+          data.lim <- stats::quantile(data[ind.chrom, ind.sample + 2], probs = c(arg$q/2, (1 - arg$q/2)), names = FALSE, type = 4, na.rm = TRUE)
         }
 
         plotObs(
@@ -287,18 +287,18 @@ plotChrom <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = NU
 
         # Add segmentation legends:
         if (!is.null(arg$legend)) {
-          legend("topright", legend = arg$legend, col = arg$seg.col, lty = arg$seg.lty, cex = arg$cex.axis)
+          graphics::legend("topright", legend = arg$legend, col = arg$seg.col, lty = arg$seg.lty, cex = arg$cex.axis)
         }
       }
 
       # If page is full; plot on new page
       if (i %% (nr * nc) == 0) {
         # Add main title to window page:
-        title(arg$title[c], outer = TRUE)
+        graphics::title(arg$title[c], outer = TRUE)
 
         # Start new window page when prompted by user:
         if (is.null(arg$dir.print)) {
-          devAskNewPage(ask = TRUE)
+          grDevices::devAskNewPage(ask = TRUE)
         }
 
         # Reset columns and row in layout:
@@ -318,17 +318,17 @@ plotChrom <- function(data = NULL, segments = NULL, pos.unit = "bp", sample = NU
     } # endfor
 
     # Add main title to page:
-    title(arg$title[c], outer = TRUE)
+    graphics::title(arg$title[c], outer = TRUE)
 
     # Close graphcis:
     if (!is.null(arg$dir.print)) {
       if (!arg$onefile) {
         cat("Plot was saved in ", paste(arg$dir.print, "/", file.name[c], ".pdf", sep = ""), "\n")
-        graphics.off()
+        grDevices::graphics.off()
       } else {
         if (c == nChrom) {
           cat("Plot was saved in ", paste(arg$dir.print, "/", file.name, ".pdf", sep = ""), "\n")
-          graphics.off()
+          grDevices::graphics.off()
         }
       }
     } # endif
