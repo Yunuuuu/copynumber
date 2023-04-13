@@ -6,7 +6,7 @@ supported_assembly <- c(
 #' @keywords internal
 get_assembly <- function(x) {
     if (inherits(data, "data.frame")) {
-        data <- as.data.frame(data)[1:5]
+        data <- as.data.frame(data, check.names = FALSE)[1:5]
         names(data) <- c("V1", "V2", "V3", "V4", "V5")
         for (i in c("V1", "V4", "V5")) {
             if (!is.factor(data[[i]])) {
@@ -14,7 +14,9 @@ get_assembly <- function(x) {
             }
         }
     } else {
-        data <- system.file("extdata", x, package = "copynumber")
+        data <- system.file("extdata", x,
+            package = "copynumber", mustWork = TRUE
+        )
         data <- readRDS(data)
     }
     data
