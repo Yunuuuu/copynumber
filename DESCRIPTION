@@ -15,11 +15,13 @@ License: Artistic-2.0
 LazyData: yes
 Date: 2013-04-16
 BuildResaveData: best
-Depends: R (>= 3.5.0), BiocGenerics
+Depends: R (>= 3.5.0)
 Imports: S4Vectors, IRanges, GenomicRanges
 Suggests: 
     knitr,
     rmarkdown,
+    bookdown,
+    ragg,
     roxygen2
 biocViews: aCGH, SNP, CopyNumberVariation, Genetics, Visualization
 Encoding: UTF-8

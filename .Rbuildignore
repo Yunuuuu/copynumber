@@ -2,3 +2,5 @@
 ^data-raw$
 ^Scratch\.RConsole$
 ^\.radian_history$
+^.*\.Rproj$
+^\.Rproj\.user$
