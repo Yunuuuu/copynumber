@@ -18,3 +18,8 @@ BuildResaveData: best
 Depends: R (>= 2.10), BiocGenerics
 Imports: S4Vectors, IRanges, GenomicRanges
 biocViews: aCGH, SNP, CopyNumberVariation, Genetics, Visualization
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Suggests: 
+    roxygen2
