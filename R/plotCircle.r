@@ -182,7 +182,7 @@ plotCircle <- function(segments, thres.gain, thres.loss = -thres.gain, pos.unit 
     # Check if we are within chromosome or in the delta-region added at the end of each chrom
     if (gridpts[i] <= (chr.stop.pos[grid.chr] - delta)) {
       band <- which(cyto.end >= gridpts[i])[1]
-      c0[i] <- switch(cyto.stain[band],
+      c0[i] <- switch(as.character(cyto.stain[band]),
         "gneg" = "white",
         "gpos100" = "black",
         "gpos75" = "gray25",
