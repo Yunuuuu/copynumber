@@ -26,7 +26,9 @@
 
 is.multiseg <- function(segments) {
   # If not multisegment, the first column name should be "sampleID"
-  multi <- ifelse(colnames(segments)[1] == "sampleID", FALSE, TRUE)
-
-  return(multi)
+  if (colnames(segments)[[1L]] == "sampleID") {
+    FALSE
+  } else {
+    TRUE
+  }
 } # end is.multiseg

@@ -31,7 +31,7 @@ checkSegments <- function(segments, type) {
   segments <- pullOutContent(res = segments, what = "segments")
 
   # Get on list form if segments is matrix or data frame:
-  if (!is.list(segments)) {
+  if (inherits(segments, "data.frame") || !is.list(segments)) {
     segments <- list(seg = segments)
   }
 
