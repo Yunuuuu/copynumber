@@ -89,7 +89,7 @@ getFreqPlotParameters <- function(type, nc, nr, thres.gain, thres.loss, chrom = 
   # Set/modify parameters more depending on user input:
 
   # Set assembly to refer to stored data instead of character string:
-  op$assembly <- get(op$assembly)
+  op$assembly <- get_assembly(op$assembly)
 
   # Placement of labels and axis annotation:
   if (is.null(op$mgp)) {

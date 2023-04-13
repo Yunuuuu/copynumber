@@ -14,7 +14,7 @@ get_assembly <- function(x) {
       }
     }
   } else {
-    data <- system.file("extdata", x,
+    data <- system.file("extdata", paste0(x, ".rds"),
       package = "copynumber", mustWork = TRUE
     )
     data <- readRDS(data)

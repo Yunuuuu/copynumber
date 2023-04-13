@@ -114,7 +114,7 @@ getPlotParameters <- function(type, cr, nSeg, sampleID = NULL, chrom = NULL, plo
   arg <- modifyList(arg, list(...))
 
   # Set assembly to refer to stored data instead of character string:
-  arg$assembly <- get(arg$assembly)
+  arg$assembly <- get_assembly(arg$assembly)
 
   # Make sure ideogram is not plotted if xlim is specified:
   if (!is.null(arg$xlim)) {

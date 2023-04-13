@@ -96,7 +96,7 @@ getHeatParameters <- function(type, nc, nr, nSample, upper.lim, lower.lim, chrom
   op <- modifyList(op, list(...))
 
   # Set assembly to refer to stored data instead of character string:
-  op$assembly <- get(op$assembly)
+  op$assembly <- get_assembly(op$assembly)
 
   # More defaults/adjustments according to user input:
 
