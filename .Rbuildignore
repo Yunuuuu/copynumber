@@ -1,4 +1,5 @@
 ^README\.Rmd$
+^README\.md$
 ^data-raw$
 ^Scratch\.RConsole$
 ^\.radian_history$
