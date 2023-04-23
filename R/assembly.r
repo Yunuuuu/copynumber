@@ -26,7 +26,7 @@ validate_assembly <- function(x) {
   if (is.character(x) && length(x) == 1L) {
     if (!any(x == supported_assembly)) {
       stop(sprintf(
-        "Only assembly %s are be supported, or you can provide a customized data.frame with at least 5 columns",
+        "Only one of assembly %s is supported, or you can provide a customized data.frame with at least 5 columns",
         paste0(supported_assembly, collapse = ", ")
       ), call. = FALSE)
     }
